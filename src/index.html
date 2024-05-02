@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <meta name="description" content="Helper tool for 'ember' driver of Zigbee2MQTT.">
+    <title>Zigbee2MQTT Ember Helper</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css">
+</head>
+
+<body>
+    <section class="hero is-primary">
+        <!-- Hero head: will stick at the top -->
+        <div class="hero-head">
+            <header class="navbar">
+                <div class="container">
+                    <div class="navbar-brand">
+                        <span class="navbar-item">
+                          <img src="https://www.zigbee2mqtt.io/logo.png" alt="Logo" />
+                          <span class="pl-2">Zigbee2MQTT Ember Helper</span>
+                        </span>
+                    </div>
+                    <div class="navbar-menu">
+                        <div class="navbar-start">
+                            <span class="navbar-item">
+                                <button onClick="window.location.reload();" class="button is-primary">
+                                    <span class="icon">&circlearrowright;</span>
+                                    <span>Reload</span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="navbar-menu">
+                        <div class="navbar-end">
+                            <span class="navbar-item">
+                                <a href="https://www.buymeacoffee.com/Nerivec" target="_blank" class="button is-ghost">
+                                    <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" class="image">
+                                </a>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+        </div>
+
+        <!-- Hero content: will be in the middle -->
+        <div id="hero-body" class="hero-body">
+            <form id="log-file-form" class="is-flex is-flex-direction-column is-justify-content-center is-align-items-center">
+                <div class="field has-addons" title="Log File Timestamp Format (same as configured in Zigbee2MQTT)">
+                    <p class="control">
+                        <a class="button is-static">&#x1F4C5; Log File Timestamp Format</a>
+                    </p>
+                    <p class="control">
+                        <input class="input" type="text" name="timestamp-format" value="YYYY-MM-DD HH:mm:ss" required="" />
+                    </p>
+                </div>
+                <div class="field has-addons is-grouped" title="Number of actual routers on the network at the time of the log">
+                    <p class="control">
+                        <a class="button is-static">&#x1F50C; Routers</a>
+                    </p>
+                    <p class="control">
+                        <input class="input" type="number" name="number-routers" placeholder="Routers" min="0" value="0" required="" />
+                    </p>
+                </div>
+                <div class="field has-addons" title="Number of actual end devices on the network at the time of the log">
+                    <p class="control">
+                        <a class="button is-static">&#x1F50B; End devices</a>
+                    </p>
+                    <p class="control">
+                        <input class="input" type="number" name="number-devices" placeholder="End Device" min="0" value="0" required="" />
+                    </p>
+                </div>
+                <div class="field has-addons">
+                    <p class="control">
+                        <a class="button is-static">&#x1F50C; Log File</a>
+                    </p>
+                    <p class="control">
+                        <input class="input" type="file" name="log-file" accept=".txt, .log" required="" title="Select Log File" />
+                    </p>
+                </div>
+                <div class="control">
+                    <button type="submit" class="button is-link">Submit</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Hero footer: will stick at the bottom -->
+        <div class="hero-foot">
+            <nav class="tabs is-boxed is-fullwidth">
+                <div class="container">
+                    <ul>
+                        <li class="is-active"><a id="menu-home" href="#">Home</a></li>
+                        <li><a id="menu-stats" href="#">Stats</a></li>
+                        <li><a id="menu-ncp-counters" href="#">NCP Counters</a></li>
+                        <li><a id="menu-ash-counters" href="#">ASH Counters</a></li>
+                        <li><a id="menu-routing" href="#">Routing</a></li>
+                        <li><a id="menu-help" href="#">Help</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </section>
+    <section id="section-home" class="section">
+        <article class="message">
+            <div class="message-header">
+                <p>Zigbee2MQTT Ember Helper</p>
+                <a href="https://github.com/Nerivec/z2m-ember-helper/" target="_blank">Version: 1.0.0 [WIP]</button>
+            </div>
+            <div class="message-body">
+                <p>Get a better understanding of your Zigbee network using Zigbee2MQTT with Ember driver (for EmberZNet-based adapter).</p>
+                <p>Enter your network details and provide the log file in the form above.</p>
+                <p>&nbsp;</p>
+                <p><em>Compatible with Zigbee2MQTT version 1.37.0 or later.</em></p>
+            </div>
+        </article>
+        <article class="message is-warning">
+            <div class="message-header">
+                <p>Warning</p>
+            </div>
+            <div class="message-body">
+                <p>The information given and derived from this tool comes from a rather small set of data at the moment.</p>
+                <p>It is only meant to be indicative and may not be entirely relevant depending on your specific network/environment.</p>
+                <p>Values for identifying potential issues remain arbitrary until improved with more feedback.</p>
+                <p><em>Processing is done locally in your browser. Your log file doesn't leave your computer.</em></p>
+            </div>
+          </article>
+    </section>
+    <section id="section-stats" class="section is-hidden"></section>
+    <section id="section-ncp-counters" class="section is-hidden"></section>
+    <section id="section-ash-counters" class="section is-hidden"></section>
+    <section id="section-routing" class="section is-hidden"></section>
+    <section id="section-help" class="section is-hidden">
+        <div class="content">
+            <h3>Logging specific to `ember`</h3>
+            <article class="message is-info">
+                <div class="message-header">Info level</div>
+                <div class="message-body">
+                    <p>The start and stop sequences describe the steps taken to get Zigbee2MQTT running with `ember` in more details. This should help to locate potential start and stop problems.</p>
+                    <p>Network status changes (up/down, channel change, open/close from Permit Join, etc).</p>
+                </div>
+            </article>
+            <article class="message is-warning">
+                <div class="message-header">Warning level</div>
+                <div class="message-body">
+                    <p>Devices identified as having an older Zigbee revision. These can be the source of problems, especially if `pre-21`.</p>
+                    <p>Failed to set a configuration parameter. Usually when the coordinator has lower memory than others. In-firmware value will be used instead.</p>
+                    <p>Conflicting device IDs. Two devices cannot have the same ID on the same network. The involved devices are kicked off the network then should rejoin (may need to re-pair them if not).</p>
+                    <p>Network/Route errors. These are accompanied by a status that describes in more details the source of the error. A few of these over time is expected (or on Zigbee2MQTT start), too many, too often, is indicative of a problem in your network.</p>
+                    <p>`NOT READY - Signaling NCP`: `ember` driver is temporarily overloaded. The coordinator is made aware and processing is deferred for a short period.</p>
+                </div>
+            </article>
+            <article class="message is-danger">
+                <div class="message-header">Error level</div>
+                <div class="message-body">
+                    <p>Mismatching EZSP version on start. `ember` currently requires a firmware with EZSP v13 (EmberZNet firmware 7.4.x).</p>
+                    <p>Mismatching backup version when restoring on start. `ember` currently only supports EZSP v12 and above backups (can be identified by opening the `coordinator_backup.json` file).</p>
+                    <p>Failed delivery of a message. The target device could not be reached. There can be several causes for this, the rest of the logs should help identify which.</p>
+                    <p>Failed requests. Messages should be self-explanatory, and give a `status` indicating the reason of the failure.</p>
+                    <p>NCP Fatal Error. The coordinator failed (the reason should be given in the message). Zigbee2MQTT will attempt to reset it and resume communication. If unsuccessful, Zigbee2MQTT will be stopped completely and the system's watchdog (if any) will attempt to restart it.</p>
+                </div>
+            </article>
+        </div>
+        <div class="content">
+            <h3>Details on values & references used by this tool</h3>
+        </div>
+        <div class="grid">
+            <div class="card">
+                <header class="card-header">
+                    <p class="card-header-title">Reference Network ("Ideal")</p>
+                </header>
+                <div class="card-content">
+                  <div class="content">
+                    <ul>
+                        <li>Coordinator: Sonoff Dongle-E</li>
+                        <li>Firmware: 7.4.1 @darkxst</li>
+                        <li>Devices: 33</li>
+                        <ul>
+                            <li>Routers: 20 (Mains single phase)</li>
+                            <li>Including 2 power meters with 2-second update rate</li>
+                            <li>End Devices: 13 (Battery)</li>
+                        </ul>
+                    </ul>
+                  </div>
+                </div>
+            </div>
+            <div class="card">
+                <header class="card-header">
+                    <p class="card-header-title">Software</p>
+                </header>
+                <div class="card-content">
+                  <div class="content">
+                    <ul>
+                        <li>Zigbee2MQTT version: 1.36.1-dev commit: ae35aae</li>
+                        <ul>
+                            <li>Add-on in HAOS on Intel NUC6i5</li>
+                            <li>Core 2024.3.3</li>
+                            <li>Supervisor 2024.03.1</li>
+                            <li>Operating System 12.1</li>
+                        </ul>
+                        <li>zigbee herdsman version: 0.41.2</li>
+                        <li>zigbee herdsman converters version: 19.15.0</li>
+                    </ul>
+                  </div>
+                </div>
+            </div>
+            <div class="card">
+                <header class="card-header">
+                    <p class="card-header-title">Sample</p>
+                </header>
+                <div class="card-content">
+                  <div class="content">
+                    <ul>
+                        <li>100 consecutive hours</li>
+                        <li>No pairing/removal</li>
+                    </ul>
+                    <ul>
+                        <li>Operated 95% via automation</li>
+                        <li>No route error reported over the entire duration</li>
+                        <li>External interferences (neighbors & co) can be considered almost nil</li>
+                    </ul>
+                  </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="./index.ts"></script>
+</body>
+
+</html>

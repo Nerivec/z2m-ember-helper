@@ -1,0 +1,42 @@
+{
+  "name": "z2m-ember-helper",
+  "version": "1.0.0",
+  "description": "Get a better understanding of your Zigbee network using Zigbee2MQTT with Ember driver (for EmberZNet-based adapter).",
+  "main": "index.js",
+  "scripts": {
+    "start": "parcel serve src/index.html",
+    "build": "cross-env NODE_ENV=production parcel build src/index.html --public-url .",
+    "deploy": "gh-pages -d dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Nerivec/z2m-ember-helper.git"
+  },
+  "keywords": [
+    "zigbee2mqtt",
+    "z2m",
+    "zigbee-herdsman",
+    "herdsman",
+    "ember",
+    "emberznet",
+    "ezsp",
+    "silabs",
+    "zigbee"
+  ],
+  "author": "Nerivec",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/Nerivec/z2m-ember-helper/issues"
+  },
+  "homepage": "https://nerivec.github.io/z2m-ember-helper",
+  "devDependencies": {
+    "cross-env": "^7.0.x",
+    "gh-pages": "^6.1.x",
+    "parcel-bundler": "^1.12.x",
+    "typescript": "^5.4.x"
+  },
+  "dependencies": {
+    "moment": "^2.30.1",
+    "simple-notify": "^1.0.x"
+  }
+}
