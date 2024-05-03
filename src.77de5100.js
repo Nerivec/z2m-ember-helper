@@ -6687,7 +6687,6 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.IDEAL_ASH_COUNTERS_FACTORS = exports.IDEAL_NCP_COUNTERS_FACTORS = exports.IDEAL_NETWORK_ROUTE_ERRORS_PER_DEVICE_PER_1H = exports.IDEAL_ROUTER_RATIO = exports.IDEAL_ASH_COUNTERS = exports.IDEAL_NCP_COUNTERS = exports.ASH_COUNTERS_NOTICE = exports.NCP_COUNTERS_NOTICE = void 0;
-var utils_1 = require("./utils");
 var zh_1 = require("./zh");
 exports.NCP_COUNTERS_NOTICE = [/*MAC_RX_BROADCAST*/"The MAC received a broadcast Data frame, Command frame, or Beacon.", /*MAC_TX_BROADCAST*/"The MAC transmitted a broadcast Data frame, Command frame or Beacon.", /*MAC_RX_UNICAST*/"The MAC received a unicast Data or Command frame.", /*MAC_TX_UNICAST_SUCCESS*/"The MAC successfully transmitted a unicast Data or Command frame. Note: Only frames with a 16-bit destination node ID are counted.", /*MAC_TX_UNICAST_RETRY*/"The MAC retried a unicast Data or Command frame after initial Tx attempt. Note: CSMA-related failures are tracked separately via PHY_CCA_FAIL_COUNT.", /*MAC_TX_UNICAST_FAILED*/"The MAC unsuccessfully transmitted a unicast Data or Command frame. Note: Only frames with a 16-bit destination node ID are counted.", /*APS_DATA_RX_BROADCAST*/"The APS layer received a data broadcast.", /*APS_DATA_TX_BROADCAST*/"The APS layer transmitted a data broadcast.", /*APS_DATA_RX_UNICAST*/"The APS layer received a data unicast.", /*APS_DATA_TX_UNICAST_SUCCESS*/"The APS layer successfully transmitted a data unicast.", /*APS_DATA_TX_UNICAST_RETRY*/"The APS layer retried a unicast Data frame.", /*APS_DATA_TX_UNICAST_FAILED*/"The APS layer unsuccessfully transmitted a data unicast.", /*ROUTE_DISCOVERY_INITIATED*/"The network layer successfully submitted a new route discovery to the MAC. <em>Current Ember default is to trigger at least one every ".concat(zh_1.MAX_TIME_MTORR_BROADCAST, " seconds.</em>"), /*NEIGHBOR_ADDED*/"An entry was added to the neighbor table.", /*NEIGHBOR_REMOVED*/"An entry was removed from the neighbor table.", /*NEIGHBOR_STALE*/"A neighbor table entry became stale because it had not been heard from.", /*JOIN_INDICATION*/"A node joined or rejoined to the network via this node.", /*CHILD_REMOVED*/"An entry was removed from the child table.", /*ASH_OVERFLOW_ERROR*/"EZSP-UART only. An overflow error occurred in the UART.", /*ASH_FRAMING_ERROR*/"EZSP-UART only. A framing error occurred in the UART.", /*ASH_OVERRUN_ERROR*/"EZSP-UART only. An overrun error occurred in the UART.", /*NWK_FRAME_COUNTER_FAILURE*/"A message was dropped at the Network layer because the NWK frame counter was not higher than the last message seen from that source.", /*APS_FRAME_COUNTER_FAILURE*/"A message was dropped at the APS layer because the APS frame counter was not higher than the last message seen from that source.", /*ASH_XOFF*/"EZSP-UART only. An XOFF was transmitted by the UART.", /*APS_LINK_KEY_NOT_AUTHORIZED*/"An encrypted message was dropped by the APS layer because the sender's key has not been authenticated. As a result, the key is not authorized for use in APS data messages.", /*NWK_DECRYPTION_FAILURE*/"A NWK encrypted message was received but dropped because decryption failed.", /*APS_DECRYPTION_FAILURE*/"An APS encrypted message was received but dropped because decryption failed.", /*ALLOCATE_PACKET_BUFFER_FAILURE*/"The number of failures to allocate a set of linked packet buffers. This doesn't necessarily mean that the packet buffer count was 0 at the time, but that the number requested was greater than the number free.", /*RELAYED_UNICAST*/"The number of relayed unicast packets.", /*PHY_TO_MAC_QUEUE_LIMIT_REACHED*/"The number of times a packet was dropped due to reaching the preset PHY-to-MAC queue limit. For each count, there may be more than 1 packet that was dropped due to the limit reached.", /*PACKET_VALIDATE_LIBRARY_DROPPED_COUNT*/"The number of times a packet was dropped due to the packet-validate library checking a packet and rejecting it due to length or other formatting problems.", /*TYPE_NWK_RETRY_OVERFLOW*/"The number of times the NWK retry queue is full and a new message failed to be added.", /*PHY_CCA_FAIL_COUNT*/"The number of times the PHY layer was unable to transmit due to a failed CCA (Clear Channel Assessment) attempt.", /*BROADCAST_TABLE_FULL*/"The number of times a NWK broadcast was dropped because the broadcast table was full.", /*PTA_LO_PRI_REQUESTED*/"The number of times a low-priority packet traffic arbitration request has been made.", /*PTA_HI_PRI_REQUESTED*/"The number of times a high-priority packet traffic arbitration request has been made.", /*PTA_LO_PRI_DENIED*/"The number of times a low-priority packet traffic arbitration request has been denied.", /*PTA_HI_PRI_DENIED*/"The number of times a high-priority packet traffic arbitration request has been denied.", /*PTA_LO_PRI_TX_ABORTED*/"The number of times a low-priority packet traffic arbitration transmission has been aborted.", /*PTA_HI_PRI_TX_ABORTED*/"The number of times a high-priority packet traffic arbitration transmission has been aborted.", /*ADDRESS_CONFLICT_SENT*/"The number of times an address conflict has caused node_id change, and an address conflict error is sent."];
 exports.ASH_COUNTERS_NOTICE = [/*TX_DATA*/"The total bytes of transmitted data within DATA frames. <em>This can significantly vary if you have device types that transmit lots of data.</em>", /*TX_ALL_FRAMES*/"The total number of transmitted frames.", /*TX_DATA_FRAMES*/"The number of transmitted DATA frames.", /*TX_ACK_FRAMES*/"The number of transmitted ACK frames.", /*TX_NAK_FRAMES*/"The number of transmitted NAK frames.", /*TX_RE_DATA_FRAMES*/"The number of re-transmitted DATA frames.", /*TX_N1_FRAMES*/"The number of transmitted frames flagged with 'not ready'.", /*TX_CANCELLED*/"The number of cancelled transmitted frames.", /*RX_DATA*/"The total bytes of received data within DATA frames. <em>This can significantly vary if you have device types that transmit lots of data.</em>", /*RX_ALL_FRAMES*/"The total number of received frames.", /*RX_DATA_FRAMES*/"The number of received DATA frames.", /*RX_ACK_FRAMES*/"The number of received ACK frames.", /*RX_NAK_FRAMES*/"The number of received NAK frames.", /*RX_RE_DATA_FRAMES*/"The number of re-transmitted received DATA frames.", /*RX_N1_FRAMES*/"The number of received frames flagged with 'not ready'.", /*RX_CANCELLED*/"The number of cancelled received frames.", /*RX_CRC_ERRORS*/"The number of received frames with CRC errors.", /*RX_COMM_ERRORS*/"The number of received frames with communication errors.", /*RX_TOO_SHORT*/"The number of received frames that were too short.", /*RX_TOO_LONG*/"The number of received frames that were too long.", /*RX_BAD_CONTROL*/"The number of received frames with illegal control byte.", /*RX_BAD_LENGTH*/"The number of received frames with illegal length for type.", /*RX_BAD_ACK_NUMBER*/"The number of received frames with bad ACK number.", /*RX_NO_BUFFER*/"The number of DATA frames discarded due to lack of buffers.", /*RX_DUPLICATES*/"The number of received duplicate re-transmitted DATA frames.", /*RX_OUT_OF_SEQUENCE*/"The number of DATA frames received out of sequence.", /*RX_ACK_TIMEOUTS*/"The number of received ACK timeouts."];
@@ -6837,8 +6836,7 @@ exports.IDEAL_ASH_COUNTERS = [
 // RX_OUT_OF_SEQUENCE
 0 // RX_ACK_TIMEOUTS
 ];
-/** From 20 routers, 13 end devices */
-exports.IDEAL_ROUTER_RATIO = (0, utils_1.round)(20 / 13, 2);
+exports.IDEAL_ROUTER_RATIO = 1.5;
 /** 3 errors per devices over 100h */
 exports.IDEAL_NETWORK_ROUTE_ERRORS_PER_DEVICE_PER_1H = 0.03;
 exports.IDEAL_NCP_COUNTERS_FACTORS = [[5, 10, false],
@@ -6977,7 +6975,7 @@ exports.IDEAL_ASH_COUNTERS_FACTORS = [[0, 0, false],
 // RX_OUT_OF_SEQUENCE
 [-1, -1, false] // RX_ACK_TIMEOUTS
 ];
-},{"./utils":"utils.ts","./zh":"zh.ts"}],"index.ts":[function(require,module,exports) {
+},{"./zh":"zh.ts"}],"index.ts":[function(require,module,exports) {
 "use strict";
 
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
@@ -7715,7 +7713,7 @@ window.onload = function () {
         content: data_1.NCP_COUNTERS_NOTICE[i]
       }]);
     }
-    var ncpCountersTable = (0, dom_1.makeTableContainer)((0, dom_1.makeTable)(['NCP Counter', 'Ideal', 'Note'], [], ncpCountersRows));
+    var ncpCountersTable = (0, dom_1.makeTableContainer)((0, dom_1.makeTable)(['NCP Counter', 'Ideal (Per Device)', 'Note'], [], ncpCountersRows));
     var ashCountersRows = [];
     for (var _i5 = 0; _i5 < consts_1.ASH_COUNTER_TYPE_COUNT; _i5++) {
       ashCountersRows.push([{
@@ -7726,7 +7724,7 @@ window.onload = function () {
         content: data_1.ASH_COUNTERS_NOTICE[_i5]
       }]);
     }
-    var ashCountersTable = (0, dom_1.makeTableContainer)((0, dom_1.makeTable)(['ASH Counter', 'Ideal', 'Note'], [], ashCountersRows));
+    var ashCountersTable = (0, dom_1.makeTableContainer)((0, dom_1.makeTable)(['ASH Counter', 'Ideal (Per Device)', 'Note'], [], ashCountersRows));
     $sectionHelp.appendChild(ncpCountersTable);
     $sectionHelp.appendChild(ashCountersTable);
   }
@@ -7756,7 +7754,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56966" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "57105" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
