@@ -625,7 +625,7 @@ window.onload = () => {
         }
 
         const ncpCountersTable = makeTableContainer(makeTable(
-            ['NCP Counter', 'Ideal', 'Note'],
+            ['NCP Counter', 'Ideal (Per Device)', 'Note'],
             [],
             ncpCountersRows,
         ));
@@ -639,7 +639,7 @@ window.onload = () => {
         }
 
         const ashCountersTable = makeTableContainer(makeTable(
-            ['ASH Counter', 'Ideal', 'Note'],
+            ['ASH Counter', 'Ideal (Per Device)', 'Note'],
             [],
             ashCountersRows,
         ));

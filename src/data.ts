@@ -158,8 +158,7 @@ export const IDEAL_ASH_COUNTERS: AshCounters = [
     0,// RX_ACK_TIMEOUTS
 ]
 
-/** From 20 routers, 13 end devices */
-export const IDEAL_ROUTER_RATIO = round(20/13, 2);
+export const IDEAL_ROUTER_RATIO = 1.5;
 
 /** 3 errors per devices over 100h */
 export const IDEAL_NETWORK_ROUTE_ERRORS_PER_DEVICE_PER_1H = 0.03;
