@@ -153,8 +153,8 @@
             <article class="message is-danger">
                 <div class="message-header">Error level</div>
                 <div class="message-body">
-                    <p>Mismatching EZSP version on start. `ember` currently requires a firmware with EZSP v13 (EmberZNet firmware 7.4.x).</p>
-                    <p>Mismatching backup version when restoring on start. `ember` currently only supports EZSP v12 and above backups (can be identified by opening the `coordinator_backup.json` file).</p>
+                    <p><em>NCP EZSP protocol version of XX does not match Host version 13</em>: `ember` currently requires a firmware with EZSP v13 (EmberZNet firmware 7.4.x). You will need to upgrade your adapter's firmware. <a href="https://github.com/Koenkk/zigbee2mqtt/discussions/21462" target="_blank">Check the first two posts here</a>.</p>
+                    <p><em>[BACKUP] Current backup file is from an unsupported EZSP version</em>: `ember` currently only supports EZSP v12 and above backups (can be identified by opening the `coordinator_backup.json` file). You will need to rename/move/delete the backup file. <em>An alternative is to upgrade your firmware to 7.3.1 and start `ezsp` once (which will create a more recent backup), then upgrade to 7.4.1 and switch to `ember`.</em></p>
                     <p>Failed delivery of a message. The target device could not be reached. There can be several causes for this, the rest of the logs should help identify which.</p>
                     <p>Failed request. Message should be self-explanatory, and give a `status` indicating the reason of the failure.</p>
                     <p>NCP Fatal Error. The coordinator failed (the reason should be given in the message). Zigbee2MQTT will attempt to reset it and resume communication. If unsuccessful, Zigbee2MQTT will be stopped completely and the system's watchdog (if any) will attempt to restart it.</p>
