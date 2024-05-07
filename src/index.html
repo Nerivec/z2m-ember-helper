@@ -7,6 +7,7 @@
     <meta name="description" content="Helper tool for 'ember' driver of Zigbee2MQTT.">
     <title>Zigbee2MQTT Ember Helper</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css">
+    <link rel="stylesheet" href="index.css" />
 </head>
 
 <body>
@@ -90,12 +91,13 @@
             <nav class="tabs is-boxed is-fullwidth">
                 <div class="container">
                     <ul>
-                        <li class="is-active"><a id="menu-home" href="#">Home</a></li>
-                        <li><a id="menu-stats" href="#">Stats</a></li>
-                        <li><a id="menu-ncp-counters" href="#">NCP Counters</a></li>
-                        <li><a id="menu-ash-counters" href="#">ASH Counters</a></li>
-                        <li><a id="menu-routing" href="#">Routing</a></li>
-                        <li><a id="menu-help" href="#">Help</a></li>
+                        <li class="is-active"><a id="menu-home" href="#home">Home</a></li>
+                        <li><a id="menu-stats" href="#stats">Stats</a></li>
+                        <li><a id="menu-ncp-counters" href="#ncp-counters">NCP Counters</a></li>
+                        <li><a id="menu-ash-counters" href="#ash-counters">ASH Counters</a></li>
+                        <li><a id="menu-routing" href="#routing">Routing</a></li>
+                        <li><a id="menu-tools" href="#tools">Tools</a></li>
+                        <li><a id="menu-help" href="#help">Help</a></li>
                     </ul>
                 </div>
             </nav>
@@ -130,6 +132,109 @@
     <section id="section-ncp-counters" class="section is-hidden"></section>
     <section id="section-ash-counters" class="section is-hidden"></section>
     <section id="section-routing" class="section is-hidden"></section>
+    <section id="section-tools" class="section is-hidden">
+        <div class="grid">
+            <div class="card">
+                <header class="card-header">
+                    <p class="card-header-title">Multi-devices Flasher</p>
+                </header>
+                <div class="card-content">
+                    Web-based Firmware Flashing by <a href="https://github.com/darkxst" target="_blank">darkxst</a>
+                </div>
+                <footer class="card-footer">
+                    <a href="https://darkxst.github.io/silabs-firmware-builder/" target="_blank" class="card-footer-item">Silabs Firmware Flasher</a>
+                </footer>
+            </div>
+            <div class="card">
+                <header class="card-header">
+                    <p class="card-header-title">Nabu Casa Home Assistant</p>
+                </header>
+                <div class="card-content">
+                    Web-based Firmware Flashing
+                </div>
+                <footer class="card-footer">
+                    <a href="https://skyconnect.home-assistant.io/firmware-update/" target="_blank" class="card-footer-item">SkyConnect Flasher</a>
+                </footer>
+            </div>
+            <div class="card">
+                <header class="card-header">
+                    <p class="card-header-title">SMLight</p>
+                </header>
+                <div class="card-content">
+                    Web-based Firmware Flashing
+                </div>
+                <footer class="card-footer">
+                    <a href="https://smlight.tech/flasher/" target="_blank" class="card-footer-item">SMLight Firmware Updater</a>
+                </footer>
+            </div>
+            <div class="card">
+                <header class="card-header">
+                    <p class="card-header-title">Nabu Casa</p>
+                </header>
+                <div class="card-content">
+                    Command-line tool (also available via <a href="https://github.com/home-assistant/addons/tree/master/silabs_flasher" target="_blank">Home Assistant add-on</a>)
+                </div>
+                <footer class="card-footer">
+                    <a href="https://github.com/NabuCasa/universal-silabs-flasher" target="_blank" class="card-footer-item">Universal Silabs Flasher</a>
+                </footer>
+            </div>
+            <div class="card">
+                <header class="card-header">
+                    <p class="card-header-title">Silicon Labs</p>
+                </header>
+                <div class="card-content">
+                    Flash Programmer included (<a href="https://docs.silabs.com/simplicity-studio-5-users-guide/latest/" target="_blank">instructions</a>)
+                </div>
+                <footer class="card-footer">
+                    <a href="https://www.silabs.com/developers/simplicity-studio" target="_blank" class="card-footer-item">Simplicity Studio</a>
+                </footer>
+            </div>
+        </div>
+        <article class="message">
+            <div class="message-header">
+                <p>Note</p>
+            </div>
+            <div class="message-body">
+                Some Ethernet adapters support flashing Zigbee firmware over their own web-interface. In this case you do not need any external software and hardware. Just go to the webinterface and press "Update Zigbee firmware". Please refer to the manual of your particular Zigbee adapter for this functionality.
+            </div>
+        </article>
+        <article class="panel is-success">
+            <p class="panel-heading">Current Recommended Firmware</p>
+            <div class="panel-block">
+              <p class="control has-icons-left">
+                Built by <a href="https://github.com/darkxst" target="_blank">darkxst</a>. See <a href="https://github.com/darkxst/silabs-firmware-builder/" target="_blank">Github README</a> for more details.
+              </p>
+            </div>
+            <a class="panel-block" href="https://github.com/darkxst/silabs-firmware-builder/raw/main/firmware_builds/zbdonglee/ncp-uart-hw-v7.4.1.0-zbdonglee-115200.gbl" target="_blank">
+                <span class="panel-icon">&#128190;</span>
+                Sonoff ZBDongle-E
+            </a>
+            <a class="panel-block" href="https://github.com/darkxst/silabs-firmware-builder/raw/ember-nohw/firmware_builds/skyconnect/ncp-uart-hw-v7.4.1.0-skyconnect-115200.gbl" target="_blank">
+                <span class="panel-icon">&#128190;</span>
+                Home Assistant SkyConnect
+            </a>
+            <a class="panel-block" href="https://github.com/darkxst/silabs-firmware-builder/raw/ember-nohw/firmware_builds/yellow/ncp-uart-hw-v7.4.1.0-yellow-115200.gbl" target="_blank">
+                <span class="panel-icon">&#128190;</span>
+                Home Assistant Yellow
+            </a>
+            <a class="panel-block" href="https://github.com/darkxst/silabs-firmware-builder/raw/ember-nohw/firmware_builds/slzb-07/ncp-uart-hw-v7.4.1.0-slzb-07-115200.gbl" target="_blank">
+                <span class="panel-icon">&#128190;</span>
+                SMLight SLZB07
+            </a>
+            <a class="panel-block" href="https://github.com/darkxst/silabs-firmware-builder/raw/main/firmware_builds/slzb-06m/ncp-uart-hw-v7.4.1.0-slzb-06m-115200.gbl" target="_blank">
+                <span class="panel-icon">&#128190;</span>
+                SMLight SLZB06-M
+            </a>
+            <a class="panel-block" href="https://github.com/darkxst/silabs-firmware-builder/raw/ember-nohw/firmware_builds/zb-gw04-1v2/ncp-uart-hw-v7.4.1.0-zb-gw04-1v2-115200.gbl" target="_blank">
+                <span class="panel-icon">&#128190;</span>
+                EasyIot ZB-GW04 v1.2
+            </a>
+            <a class="panel-block" href="https://github.com/darkxst/silabs-firmware-builder/raw/main/firmware_builds/zb-gw04-1v1/ncp-uart-hw-v7.4.1.0-zb-gw04-1v1-115200.gbl" target="_blank">
+                <span class="panel-icon">&#128190;</span>
+                EasyIot ZB-GW04 v1.1
+            </a>
+        </article>
+    </section>
     <section id="section-help" class="section is-hidden">
         <div class="content">
             <h3>Logging specific to `ember`</h3>
@@ -225,7 +330,7 @@
         </div>
     </section>
 
-    <script src="./index.ts"></script>
+    <script type="module" src="./index.ts"></script>
 </body>
 
 </html>

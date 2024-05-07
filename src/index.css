@@ -1,3 +1,5 @@
+@import 'npm:simple-notify/dist/simple-notify.css';
+
 .navbar-item {
     color: white;
 }

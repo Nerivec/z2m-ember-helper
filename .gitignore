@@ -12,4 +12,4 @@ node_modules
 oclif.lock
 oclif.manifest.json
 /data
-/.cache
+/.parcel-cache

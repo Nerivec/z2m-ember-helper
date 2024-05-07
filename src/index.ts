@@ -1,7 +1,5 @@
 import moment from 'moment';
 import Notify from 'simple-notify';
-import 'simple-notify/dist/simple-notify.css';
-import './index.css';
 import { NotifyError } from './notify-error';
 import { round, toHex } from "./utils";
 import { AshCounterType, EmberCounterType } from "./zh";
@@ -320,6 +318,8 @@ window.onload = () => {
     const $sectionAshCounters = document.getElementById('section-ash-counters')! as HTMLLinkElement;
     const $menuRoutingLink = document.getElementById('menu-routing')! as HTMLLinkElement;
     const $sectionRouting = document.getElementById('section-routing')! as HTMLLinkElement;
+    const $menuToolsLink = document.getElementById('menu-tools')! as HTMLLinkElement;
+    const $sectionTools = document.getElementById('section-tools')! as HTMLLinkElement;
     const $menuHelpLink = document.getElementById('menu-help')! as HTMLLinkElement;
     const $sectionHelp = document.getElementById('section-help')! as HTMLLinkElement;
     const menu: [HTMLLinkElement, HTMLLinkElement][] = [
@@ -328,6 +328,7 @@ window.onload = () => {
         [$menuNcpCountersLink, $sectionNcpCounters],
         [$menuAshCountersLink, $sectionAshCounters],
         [$menuRoutingLink, $sectionRouting],
+        [$menuToolsLink, $sectionTools],
         [$menuHelpLink, $sectionHelp]
     ];
 
@@ -614,6 +615,9 @@ window.onload = () => {
         }
     });
 
+    $menuToolsLink.addEventListener('click', async function () {
+    });
+
     // add dynamic part of the help section
     {
         const ncpCountersRows: TableCellData[][] = [];
@@ -646,5 +650,13 @@ window.onload = () => {
 
         $sectionHelp.appendChild(ncpCountersTable)
         $sectionHelp.appendChild(ashCountersTable);
+    }
+
+    if (window.location.hash) {
+        const link = document.getElementById(`menu-${window.location.hash.slice(1)}`);
+
+        if (link) {
+            link.click();
+        }
     }
 };
