@@ -255,7 +255,7 @@
                     <p><em>Node descriptor reports device is only compliant to revision</em>: Device identified as having an older Zigbee revision. These can be the source of problems, especially if `pre-21`.</p>
                     <p><em>[EzspConfigId] Failed to SET</em>: Usually when the coordinator has lower memory than others. In-firmware value will be used instead.</p>
                     <p><em>An ID conflict was detected</em>: Two devices cannot have the same ID on the same network. The involved devices are kicked off the network then should rejoin (may need to re-pair them if not).</p>
-                    <p><em>Network/Route error</em>: These are accompanied by a status that describes in more details the source of the error. A few of these over time is expected (or on Zigbee2MQTT start), too many, too often, is indicative of a problem in your network.</p>
+                    <p><em>Network/Route error</em>: The error indicates that there was a problem sending/receiving messages from the target node (see below for more details). A few of these over time is expected (or on Zigbee2MQTT start), too many, too often, is indicative of a problem in your network.</p>
                     <p><em>NOT READY - Signaling NCP</em>: `ember` driver is temporarily overloaded. The coordinator is made aware and processing is deferred for a short period.</p>
                 </div>
             </article>
@@ -267,6 +267,17 @@
                     <p>Failed delivery of a message. The target device could not be reached. There can be several causes for this, the rest of the logs should help identify which.</p>
                     <p>Failed request. Message should be self-explanatory, and give a `status` indicating the reason of the failure.</p>
                     <p>NCP Fatal Error. The coordinator failed (the reason should be given in the message). Zigbee2MQTT will attempt to reset it and resume communication. If unsuccessful, Zigbee2MQTT will be stopped completely and the system's watchdog (if any) will attempt to restart it.</p>
+                </div>
+            </article>
+            <article class="message">
+                <div class="message-header">
+                    <p>Details on Network/Route errors</p>
+                </div>
+                <div class="message-body">
+                    <p>A status of SOURCE_ROUTE_FAILURE indicates that a source-routed unicast sent from this node encountered a broken link. Note that this case occurs only if this node is a concentrator using many-to-one routing for inbound messages and source-routing for outbound messages. The node prior to the broken link generated the route error message and returned it to us along the many-to-one route.</p>
+                    <p>A status of MANY_TO_ONE_ROUTE_FAILURE also occurs only if the local device is a concentrator, and indicates that a unicast sent to the local device along a many-to-one route encountered a broken link. The node prior to the broken link generated the route error message and forwarded it to the local device via a randomly chosen neighbor, taking advantage of the many-to-one nature of the route.</p>
+                    <p>A status of MAC_INDIRECT_TIMEOUT indicates that a message sent to the target end device could not be delivered by the parent because the indirect transaction timer expired. Upon receipt of the route error, the stack sets the extended timeout for the target node in the address table, if present. It then calls this handler to indicate receipt of the error.</p>
+                    <p>A new route error message is generated for each failed retry. Therefore, it is not unusual to receive three route error messages in succession for a single failed retried APS unicast. On the other hand, it is also not guaranteed that any route error messages will be delivered successfully at all.</p>
                 </div>
             </article>
         </div>
