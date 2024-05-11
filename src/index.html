@@ -107,7 +107,7 @@
         <article class="message">
             <div class="message-header">
                 <p>Zigbee2MQTT Ember Helper</p>
-                <a href="https://github.com/Nerivec/z2m-ember-helper/" target="_blank">Version: 1.0.0 [WIP]</button>
+                <a href="https://github.com/Nerivec/z2m-ember-helper/" target="_blank">Version: 1.1.0 [WIP]</button>
             </div>
             <div class="message-body">
                 <p>Get a better understanding of your Zigbee network using Zigbee2MQTT with Ember driver (for EmberZNet-based adapter).</p>
@@ -126,7 +126,16 @@
                 <p>Values for identifying potential issues remain arbitrary until improved with more feedback.</p>
                 <p><em>Processing is done locally in your browser. Your log file doesn't leave your computer.</em></p>
             </div>
-          </article>
+        </article>
+        <article class="message">
+            <div class="message-header">
+                <p>Changelog</p>
+            </div>
+            <div class="message-body">
+                <p>[1.1.0]</p>
+                <p>- "Ideal" NCP Counters are now based on a 720-hour sample (associated log file available for download in Help section).</p>
+            </div>
+        </article>
     </section>
     <section id="section-stats" class="section is-hidden"></section>
     <section id="section-ncp-counters" class="section is-hidden"></section>
@@ -311,15 +320,14 @@
                 <div class="card-content">
                   <div class="content">
                     <ul>
-                        <li>Zigbee2MQTT version: 1.36.1-dev commit: ae35aae</li>
+                        <li>Zigbee2MQTT version: 1.36.1-dev commit: <a href="https://github.com/Koenkk/zigbee2mqtt/commit/3c1a4af" target="_blank">3c1a4af</a></li>
                         <ul>
                             <li>Add-on in HAOS on Intel NUC6i5</li>
-                            <li>Core 2024.3.3</li>
-                            <li>Supervisor 2024.03.1</li>
-                            <li>Operating System 12.1</li>
+                            <li>HA Core: kept up-to-date (skipping x.x.0 releases)</li>
+                            <li>HA Operating System: 12.2</li>
                         </ul>
-                        <li>zigbee herdsman version: 0.41.2</li>
-                        <li>zigbee herdsman converters version: 19.15.0</li>
+                        <li>zigbee herdsman version: 0.42.0</li>
+                        <li>zigbee herdsman converters version: 19.17.0</li>
                     </ul>
                   </div>
                 </div>
@@ -331,13 +339,14 @@
                 <div class="card-content">
                   <div class="content">
                     <ul>
-                        <li>100 consecutive hours</li>
-                        <li>No pairing/removal</li>
+                        <li>720 consecutive hours (30 days)</li>
+                        <li>Minimal changes to the network (1 pairing)</li>
+                        <li>Operated 95% via automation</li>
+                        <li>External interferences (neighbors & co) can be considered almost nil</li>
+                        <li>ASH Counters are not present since they were introduced later on (current "ideal" based on a small sample)</li>
                     </ul>
                     <ul>
-                        <li>Operated 95% via automation</li>
-                        <li>No route error reported over the entire duration</li>
-                        <li>External interferences (neighbors & co) can be considered almost nil</li>
+                        <li><a href="./2024-04-11-2024-05-11_sanitized.log" target="_blank">Link to the associated log file</a></li>
                     </ul>
                   </div>
                 </div>

@@ -13,7 +13,7 @@ export const NCP_COUNTERS_NOTICE: readonly string[] = [
     /*APS_DATA_TX_BROADCAST*/`The APS layer transmitted a data broadcast.`,
     /*APS_DATA_RX_UNICAST*/`The APS layer received a data unicast.`,
     /*APS_DATA_TX_UNICAST_SUCCESS*/`The APS layer successfully transmitted a data unicast.`,
-    /*APS_DATA_TX_UNICAST_RETRY*/`The APS layer retried a unicast Data frame.`,
+    /*APS_DATA_TX_UNICAST_RETRY*/`The APS layer retried a unicast data frame.`,
     /*APS_DATA_TX_UNICAST_FAILED*/`The APS layer unsuccessfully transmitted a data unicast.`,
     /*ROUTE_DISCOVERY_INITIATED*/`The network layer successfully submitted a new route discovery to the MAC. <em>Current Ember default is to trigger at least one every ${MAX_TIME_MTORR_BROADCAST} seconds.</em>`,
     /*NEIGHBOR_ADDED*/`An entry was added to the neighbor table.`,
@@ -80,40 +80,39 @@ export const ASH_COUNTERS_NOTICE: readonly string[] = [
  * @see index.html for details on these references
  */
 export const IDEAL_NCP_COUNTERS: EmberCounters = [
-    // [6388.21, 468.93, 7413.61, 6738.18, 62.46, 0.32, 0.14, 0.14, 5471.5, 5350.36, 0, 0, 60.32, 0, 0, 3.61, 0, 0, 0, 0, 0, 0.93, 0, 0, 0, 0, 6.43, 0, 0, 0, 0, 0, 0.25, 0, 0, 0, 0, 0, 0, 0, 0],
-    193.5823,// MAC_RX_BROADCAST
-    14.21,// MAC_TX_BROADCAST
-    224.6548,// MAC_RX_UNICAST
-    204.1872,// MAC_TX_UNICAST_SUCCESS
-    1.8929,// MAC_TX_UNICAST_RETRY
-    0.0097,// MAC_TX_UNICAST_FAILED
-    0.0043,// APS_DATA_RX_BROADCAST
-    0.0043,// APS_DATA_TX_BROADCAST
-    165.803,// APS_DATA_RX_UNICAST
-    162.132,// APS_DATA_TX_UNICAST_SUCCESS
+    203.6262,// MAC_RX_BROADCAST
+    14.1578,// MAC_TX_BROADCAST
+    226.4056,// MAC_RX_UNICAST
+    205.8569,// MAC_TX_UNICAST_SUCCESS
+    2.0597,// MAC_TX_UNICAST_RETRY
+    0.0524,// MAC_TX_UNICAST_FAILED
+    0.008,// APS_DATA_RX_BROADCAST
+    0.008,// APS_DATA_TX_BROADCAST
+    167.3364,// APS_DATA_RX_UNICAST
+    163.6076,// APS_DATA_TX_UNICAST_SUCCESS
     0,// APS_DATA_TX_UNICAST_RETRY
-    0,// APS_DATA_TX_UNICAST_FAILED
+    0.0038,// APS_DATA_TX_UNICAST_FAILED
     MAX_TIME_MTORR_BROADCAST,// ROUTE_DISCOVERY_INITIATED
     0,// NEIGHBOR_ADDED
     0,// NEIGHBOR_REMOVED
-    0.1093,// NEIGHBOR_STALE
+    0.0263,// NEIGHBOR_STALE
     0,// JOIN_INDICATION
     0,// CHILD_REMOVED
     0,// ASH_OVERFLOW_ERROR
     0,// ASH_FRAMING_ERROR
     0,// ASH_OVERRUN_ERROR
-    0.0281,// NWK_FRAME_COUNTER_FAILURE
+    0.0393,// NWK_FRAME_COUNTER_FAILURE
     0,// APS_FRAME_COUNTER_FAILURE
     0,// ASH_XOFF
     0,// APS_LINK_KEY_NOT_AUTHORIZED
     0,// NWK_DECRYPTION_FAILURE
-    0.1948,// APS_DECRYPTION_FAILURE
+    0.2279,// APS_DECRYPTION_FAILURE
     0,// ALLOCATE_PACKET_BUFFER_FAILURE
     0,// RELAYED_UNICAST
     0,// PHY_TO_MAC_QUEUE_LIMIT_REACHED
     0,// PACKET_VALIDATE_LIBRARY_DROPPED_COUNT
     0,// TYPE_NWK_RETRY_OVERFLOW
-    0.0076,// PHY_CCA_FAIL_COUNT
+    0.0102,// PHY_CCA_FAIL_COUNT
     0,// BROADCAST_TABLE_FULL
     0,// PTA_LO_PRI_REQUESTED
     0,// PTA_HI_PRI_REQUESTED
@@ -128,7 +127,6 @@ export const IDEAL_NCP_COUNTERS: EmberCounters = [
  * @see index.html for details on these references
  */
 export const IDEAL_ASH_COUNTERS: AshCounters = [
-    // [358977, 20943, 5107, 15836, 0, 0, 0, 0, 134107, 15868, 15868, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     10878,// TX_DATA
     634,// TX_ALL_FRAMES
     154,// TX_DATA_FRAMES
@@ -158,7 +156,7 @@ export const IDEAL_ASH_COUNTERS: AshCounters = [
     0,// RX_ACK_TIMEOUTS
 ]
 
-export const IDEAL_ROUTER_RATIO = 1.5;
+export const IDEAL_ROUTER_RATIO = 0.5;
 
 /** 3 errors per devices over 100h */
 export const IDEAL_NETWORK_ROUTE_ERRORS_PER_DEVICE_PER_1H = 0.03;

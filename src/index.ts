@@ -386,7 +386,7 @@ window.onload = () => {
             ];
 
             if (ratio !== -1) {
-                parametersList.push(`Routers to end devices ratio: ${ratio} (Ideal: ${IDEAL_ROUTER_RATIO})`);
+                parametersList.push(`Routers to end devices ratio: ${ratio} (Ideal: above ${IDEAL_ROUTER_RATIO})`);
 
                 const warningRatio = (totalDevices > 10) && (ratio < IDEAL_ROUTER_RATIO);
 
@@ -491,7 +491,7 @@ window.onload = () => {
                 const counter = ashCounters.avgPerDevice[i];
                 const ideal = IDEAL_ASH_COUNTERS[i];
 
-                ashCountersIdealRows.push({ content: ideal.toString(), className: 'is-info' });
+                ashCountersIdealRows.push({ content: ideal.toString(), className: 'is-dark' });
                 ashCountersAvgPerDeviceRows.push({
                     content: counter.toString(),
                     className: getValueClassName(counter, ideal, ...IDEAL_ASH_COUNTERS_FACTORS[i]),
