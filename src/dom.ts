@@ -1,10 +1,12 @@
 import { ListItemStatus, TableCellData } from "./types";
 
+export type ValueClassName = 'is-danger' | 'is-warning';
+
 /**
  * If `badFactor` and `veryBadFactor` are -1, it means any value other than 0 should flag as is-danger
  * If `badFactor` and `veryBadFactor` are -2, it means any value other than 0 should flag as is-warning
  */
-export function getValueClassName(value: number, ideal: number, badFactor: number, veryBadFactor: number = 0, higherBetter: boolean = false): string | undefined {
+export function getValueClassName(value: number, ideal: number, badFactor: number, veryBadFactor: number = 0, higherBetter: boolean = false): ValueClassName | undefined {
     if (ideal !== 0 && badFactor !== 0) {
         if (veryBadFactor === 0) {
             veryBadFactor = badFactor * 2;
@@ -149,4 +151,22 @@ export function makeListCard(title: string, listItems: string[]): HTMLDivElement
     card.appendChild(cardContent);
     
     return card;
+}
+
+export function makeMessage(title: string, message: string, className: string = ''): HTMLElement {
+    const article = document.createElement('article');
+    article.className = `message ${className}`;
+
+    const header = document.createElement('div');
+    header.className = 'message-header';
+    header.innerText = title;
+
+    const body = document.createElement('div');
+    body.className = 'message-body';
+    body.innerHTML = message;
+
+    article.appendChild(header);
+    article.appendChild(body);
+
+    return article;
 }

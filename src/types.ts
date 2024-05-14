@@ -46,6 +46,5 @@ export type LogAshCounters = {
 };
 
 export type LogNetworkRouteErrors = {
-    all: [timestamp: Date, device: number, error: string/*EmberStackError*/][];
-    counters: { [device: number]: number };
+    all: [timestamp: Date, device: number, error: string/*EmberStackError*/, count: number][];
 };

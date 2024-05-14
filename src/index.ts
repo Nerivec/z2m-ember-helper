@@ -2,7 +2,7 @@ import moment from 'moment';
 import Notify from 'simple-notify';
 import { NotifyError } from './notify-error';
 import { round, toHex } from "./utils";
-import { AshCounterType, EmberCounterType } from "./zh";
+import { AshCounterType, EmberCounterType, EmberStackError } from "./zh";
 import {
     AshCounters,
     EmberCounters,
@@ -26,7 +26,7 @@ import {
     TIMESTAMP_REGEX,
     DURATION_WARNING_FACTOR
 } from './consts';
-import { getValueClassName, makeListCard, makeParagraph, makeTable, makeTableContainer } from './dom';
+import { getValueClassName, makeListCard, makeMessage, makeTable, makeTableContainer } from './dom';
 import {
     ASH_COUNTERS_NOTICE,
     IDEAL_ASH_COUNTERS,
@@ -35,7 +35,7 @@ import {
     IDEAL_NCP_COUNTERS_FACTORS,
     IDEAL_ASH_COUNTERS_FACTORS,
     IDEAL_ROUTER_RATIO,
-    IDEAL_NETWORK_ROUTE_ERRORS_PER_DEVICE_PER_1H
+    EMBER_STACK_ERRORS_NOTICE
 } from './data';
 
 /** z2m default */
@@ -97,7 +97,6 @@ const ashCounters: LogAshCounters = {
 
 const networkRouteErrors: LogNetworkRouteErrors = {
     all: [],
-    counters: {},
 }
 
 function initVariables(): void {
@@ -123,7 +122,6 @@ function initVariables(): void {
     ashCounters.avgPerDevice.fill(0);
 
     networkRouteErrors.all = [];
-    networkRouteErrors.counters = {};
 }
 
 /**
@@ -252,15 +250,14 @@ async function parseLogFile(): Promise<void> {
                 const prev = (networkRouteErrors.all[networkRouteErrors.all.length - 1]);
                 const countOffset = prev[0].getTime() + ROUTING_ERROR_DUP_IGNORE_MS;
 
-                // ignore duplicate errors within short period
+                // count duplicate errors within short period instead
                 if (prev[1] === device && prev[2] === error && timestamp.getTime() < countOffset) {
+                    prev[3] += 1;
                     continue;
                 }
             }
 
-            networkRouteErrors.all.push([timestamp, device, error]);
-
-            networkRouteErrors.counters[device] = (networkRouteErrors.counters[device] ?? 0) + 1;
+            networkRouteErrors.all.push([timestamp, device, error, 1]);
 
             continue;
         }
@@ -424,7 +421,7 @@ window.onload = () => {
             const ncpCountersAvgRows: TableCellData[] = [];
 
             for (let i = 0; i < EMBER_COUNTER_TYPE_COUNT; i++) {
-                ncpCountersHeader.push(EmberCounterType[i]);
+                ncpCountersHeader.push(`<span title="${NCP_COUNTERS_NOTICE[i]}">${EmberCounterType[i]}</span>`);
 
                 const counter = ncpCounters.avgPerDevice[i];
                 const ideal = IDEAL_NCP_COUNTERS[i];
@@ -473,6 +470,101 @@ window.onload = () => {
                 ncpCountersRows,
             ));
 
+            {
+                const ashErrors = (ncpCountersSum[EmberCounterType.ASH_OVERFLOW_ERROR] + ncpCountersSum[EmberCounterType.ASH_FRAMING_ERROR]
+                    + ncpCountersSum[EmberCounterType.ASH_OVERRUN_ERROR] + ncpCountersSum[EmberCounterType.ASH_XOFF]);
+
+                if (ashErrors !== 0) {
+                    const msg = makeMessage('ASH errors detected', 'This can indicate a bad connection with the adapter or an issue with the driver installed in the operating system.', 'is-danger');
+
+                    $sectionNcpCounters.appendChild(msg);
+                }
+            }
+
+            {
+                const cls = getValueClassName(
+                    ncpCounters.avgPerDevice[EmberCounterType.PHY_CCA_FAIL_COUNT],
+                    IDEAL_NCP_COUNTERS[EmberCounterType.PHY_CCA_FAIL_COUNT],
+                    ...IDEAL_NCP_COUNTERS_FACTORS[EmberCounterType.PHY_CCA_FAIL_COUNT]
+                );
+
+                if (cls !== undefined) {
+                    const msg = makeMessage('CCA failure count is high', 'This can indicate interferences on the 2.4GHz band on or around the current channel (WiFi, other Zigbee...).', cls);
+
+                    $sectionNcpCounters.appendChild(msg);
+                }
+            }
+
+            {
+                const cls = getValueClassName(
+                    ncpCounters.avgPerDevice[EmberCounterType.ROUTE_DISCOVERY_INITIATED],
+                    IDEAL_NCP_COUNTERS[EmberCounterType.ROUTE_DISCOVERY_INITIATED],
+                    ...IDEAL_NCP_COUNTERS_FACTORS[EmberCounterType.ROUTE_DISCOVERY_INITIATED]
+                );
+
+                if (cls !== undefined) {
+                    const msg = makeMessage('Initiated route discovery count is high', 'This can indicate general instability in the network (unresponsive devices, bad routers...).', cls);
+
+                    $sectionNcpCounters.appendChild(msg);
+                }
+            }
+
+            {
+                const cls = getValueClassName(
+                    ncpCounters.avgPerDevice[EmberCounterType.MAC_TX_UNICAST_RETRY],
+                    IDEAL_NCP_COUNTERS[EmberCounterType.MAC_TX_UNICAST_RETRY],
+                    ...IDEAL_NCP_COUNTERS_FACTORS[EmberCounterType.MAC_TX_UNICAST_RETRY]
+                );
+
+                if (cls !== undefined) {
+                    const msg = makeMessage('Packet retry count is high', 'This can indicate general instability in your network (unresponsive devices, bad routers...).', cls);
+
+                    $sectionNcpCounters.appendChild(msg);
+                }
+            }
+
+            {
+                const cls = getValueClassName(
+                    ncpCounters.avgPerDevice[EmberCounterType.ADDRESS_CONFLICT_SENT],
+                    IDEAL_NCP_COUNTERS[EmberCounterType.ADDRESS_CONFLICT_SENT],
+                    ...IDEAL_NCP_COUNTERS_FACTORS[EmberCounterType.ADDRESS_CONFLICT_SENT]
+                );
+
+                if (cls !== undefined) {
+                    const msg = makeMessage('Address conflicts detected', 'This can indicate device(s) with poor firmware.', cls);
+
+                    $sectionNcpCounters.appendChild(msg);
+                }
+            }
+
+            {
+                const cls = getValueClassName(
+                    ncpCounters.avgPerDevice[EmberCounterType.BROADCAST_TABLE_FULL],
+                    IDEAL_NCP_COUNTERS[EmberCounterType.BROADCAST_TABLE_FULL],
+                    ...IDEAL_NCP_COUNTERS_FACTORS[EmberCounterType.BROADCAST_TABLE_FULL]
+                );
+
+                if (cls !== undefined) {
+                    const msg = makeMessage('Broadcast table full detected', 'This can indicate the network is relying too heavily on broadcasts (messages to the whole network or to groups).', cls);
+
+                    $sectionNcpCounters.appendChild(msg);
+                }
+            }
+
+            {
+                const cls = getValueClassName(
+                    ncpCounters.avg[EmberCounterType.NEIGHBOR_STALE],
+                    1,
+                    ...IDEAL_NCP_COUNTERS_FACTORS[EmberCounterType.NEIGHBOR_STALE]
+                );
+
+                if (cls !== undefined) {
+                    const msg = makeMessage('Stale neighbors count is high', 'This can indicate devices are regularly losing connection to the network.', cls);
+
+                    $sectionNcpCounters.appendChild(msg);
+                }
+            }
+
             $sectionNcpCounters.appendChild(tableContainerAvg);
             $sectionNcpCounters.appendChild(tableContainerAll);
         }
@@ -486,7 +578,7 @@ window.onload = () => {
             const ashCountersAvgRows: TableCellData[] = [];
 
             for (let i = 0; i < ASH_COUNTER_TYPE_COUNT; i++) {
-                ashCountersHeader.push(AshCounterType[i]);
+                ashCountersHeader.push(`<span title="${ASH_COUNTERS_NOTICE[i]}">${AshCounterType[i]}</span>`);
 
                 const counter = ashCounters.avgPerDevice[i];
                 const ideal = IDEAL_ASH_COUNTERS[i];
@@ -534,6 +626,47 @@ window.onload = () => {
                 ashCountersRows,
             ));
 
+            {
+                const cls = getValueClassName(
+                    ashCounters.avgPerDevice[AshCounterType.TX_N1_FRAMES],
+                    IDEAL_ASH_COUNTERS[AshCounterType.TX_N1_FRAMES],
+                    ...IDEAL_ASH_COUNTERS_FACTORS[AshCounterType.TX_N1_FRAMES]
+                );
+
+                if (cls !== undefined) {
+                    const msg = makeMessage('"Not ready" transaction count is high', 'This can indicate heavy spamming from devices. Zigbee2MQTT was forced to regulate the flow.', cls);
+
+                    $sectionAshCounters.appendChild(msg);
+                }
+            }
+
+            {
+                const cls = getValueClassName(
+                    ashCounters.avgPerDevice[AshCounterType.RX_NO_BUFFER],
+                    IDEAL_ASH_COUNTERS[AshCounterType.RX_NO_BUFFER],
+                    ...IDEAL_ASH_COUNTERS_FACTORS[AshCounterType.RX_NO_BUFFER]
+                );
+
+                if (cls !== undefined) {
+                    const msg = makeMessage('Out of buffer count is high', 'This can indicate heavy spamming from devices. Zigbee2MQTT was forced to drop messages.', cls);
+
+                    $sectionAshCounters.appendChild(msg);
+                }
+            }
+
+            {
+                const rxBad = (ashCounters.avg[AshCounterType.RX_CRC_ERRORS] + ashCounters.avg[AshCounterType.RX_COMM_ERRORS] + ashCounters.avg[AshCounterType.RX_TOO_SHORT]
+                    + ashCounters.avg[AshCounterType.RX_TOO_LONG] + ashCounters.avg[AshCounterType.RX_BAD_CONTROL] + ashCounters.avg[AshCounterType.RX_BAD_LENGTH]
+                    + ashCounters.avg[AshCounterType.RX_BAD_ACK_NUMBER] + ashCounters.avg[AshCounterType.RX_OUT_OF_SEQUENCE] + ashCounters.avg[AshCounterType.RX_ACK_TIMEOUTS]);
+                const cls = getValueClassName(rxBad, 1, 5, 10, false);
+
+                if (cls !== undefined) {
+                    const msg = makeMessage('Error count with received messages is high', 'This can indicate general instability (adapter/network).', cls);
+
+                    $sectionAshCounters.appendChild(msg);
+                }
+            }
+
             $sectionAshCounters.appendChild(tableContainerAvg);
             $sectionAshCounters.appendChild(tableContainerAll);
         }
@@ -541,29 +674,56 @@ window.onload = () => {
         // routing
         if (networkRouteErrors.all.length) {
             const rows: TableCellData[][] = [];
+            const errorsByDevice: {[error: string/*EmberStackError*/]: {[device: number]: number }} = {};
 
             for (const entry of networkRouteErrors.all) {
                 const device = entry[1];
-                const counter = round(networkRouteErrors.counters[device] / logMetadata.duration, 4);
-                const className = getValueClassName(counter, IDEAL_NETWORK_ROUTE_ERRORS_PER_DEVICE_PER_1H, 4, 8);
+                const error = entry[2];
+                const count = entry[3];
+
+                if (errorsByDevice[error] === undefined) {
+                    errorsByDevice[error] = {};
+                }
+
+                errorsByDevice[error][device] = (errorsByDevice[error][device] === undefined) ? count : errorsByDevice[error][device] + count;
+
                 rows.push([
-                    { content: moment(entry[0]).format(timestampFormat), className },
-                    { content: `${device} (${toHex(device)})`, className },
-                    { content: entry[2], className },
-                    { content: counter.toString(), className }
+                    { content: moment(entry[0]).format(timestampFormat) },
+                    { content: `${device} / ${toHex(device)}` },
+                    { content: error },
+                    { content: count.toString(), className: count > 2 ? 'is-danger' : (count > 1 ? 'is-warning' : undefined) },
                 ]);
             }
 
             const tableContainer = makeTableContainer(makeTable(
-                ['Timestamp', 'Device (Hex)', 'Error', 'Occurrences per hour'],
+                ['<span title="First occurence">Timestamp</span>', 'Device / Hex', 'Error', '<span title="Within a short period at and after Timestamp (i.e. failed retries)">Count</span>'],
                 [],
                 rows,
             ));
 
+            for (const error in errorsByDevice) {
+                const devices: string[] = [];
+
+                for (const k in errorsByDevice[error]) {
+                    const deviceAvgPerHour = round(errorsByDevice[error][k] / logMetadata.duration, 4);
+
+                    // only display msg for device if average per hour is high
+                    if (deviceAvgPerHour > 0.1) {
+                        devices.push(`${k} / ${toHex(parseInt(k))} (${deviceAvgPerHour} error(s) per hour)`);
+                    }
+                }
+
+                if (devices.length > 0) {
+                    // @ts-expect-error lookup by key
+                    const notice = EMBER_STACK_ERRORS_NOTICE[EmberStackError[error]];
+                    const msg = makeMessage(`${error}`, `<p>For ${devices.join(', ')}.</p><p>${notice}</p>`, 'is-warning');
+
+                    $sectionRouting.appendChild(msg);
+                }
+            }
+
             $sectionRouting.appendChild(tableContainer);
         }
-
-        $menuStatsLink.click();
 
         $heroBody.className = 'is-hidden';
 

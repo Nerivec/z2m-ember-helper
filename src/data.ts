@@ -1,6 +1,6 @@
 import { AshCounters, EmberCounters } from "./types";
 import { round } from "./utils";
-import { MAX_TIME_MTORR_BROADCAST } from "./zh";
+import { EmberStackError, MAX_TIME_MTORR_BROADCAST } from "./zh";
 
 export const NCP_COUNTERS_NOTICE: readonly string[] = [
     /*MAC_RX_BROADCAST*/`The MAC received a broadcast Data frame, Command frame, or Beacon.`,
@@ -74,7 +74,30 @@ export const ASH_COUNTERS_NOTICE: readonly string[] = [
     /*RX_DUPLICATES*/`The number of received duplicate re-transmitted DATA frames.`,
     /*RX_OUT_OF_SEQUENCE*/`The number of DATA frames received out of sequence.`,
     /*RX_ACK_TIMEOUTS*/`The number of received ACK timeouts.`,
-]
+];
+
+export const EMBER_STACK_ERRORS_NOTICE: Readonly<Record<EmberStackError, string>> = {
+    [EmberStackError.ROUTE_ERROR_NO_ROUTE_AVAILABLE]: ``,
+    [EmberStackError.ROUTE_ERROR_TREE_LINK_FAILURE]: ``,
+    [EmberStackError.ROUTE_ERROR_NON_TREE_LINK_FAILURE]: ``,
+    [EmberStackError.ROUTE_ERROR_LOW_BATTERY_LEVEL]: ``,
+    [EmberStackError.ROUTE_ERROR_NO_ROUTING_CAPACITY]: ``,
+    [EmberStackError.ROUTE_ERROR_NO_INDIRECT_CAPACITY]: ``,
+    [EmberStackError.ROUTE_ERROR_INDIRECT_TRANSACTION_EXPIRY]: ``,
+    [EmberStackError.ROUTE_ERROR_TARGET_DEVICE_UNAVAILABLE]: ``,
+    [EmberStackError.ROUTE_ERROR_TARGET_ADDRESS_UNALLOCATED]: ``,
+    [EmberStackError.ROUTE_ERROR_PARENT_LINK_FAILURE]: ``,
+    [EmberStackError.ROUTE_ERROR_VALIDATE_ROUTE]: ``,
+    [EmberStackError.ROUTE_ERROR_SOURCE_ROUTE_FAILURE]: `Indicates a message sent from the device encountered a broken link. The device prior to the broken link generated the error message and return it to the device.`,
+    [EmberStackError.ROUTE_ERROR_MANY_TO_ONE_ROUTE_FAILURE]: `Indicates that a message sent to the device encountered a broken link. The device prior to the broken link generated the error message and forwarded it to the device via a randomly chosen neighbor.`,
+    [EmberStackError.ROUTE_ERROR_ADDRESS_CONFLICT]: ``,
+    [EmberStackError.ROUTE_ERROR_VERIFY_ADDRESSES]: ``,
+    [EmberStackError.ROUTE_ERROR_PAN_IDENTIFIER_UPDATE]: ``,
+    [EmberStackError.NETWORK_STATUS_NETWORK_ADDRESS_UPDATE]: ``,
+    [EmberStackError.NETWORK_STATUS_BAD_FRAME_COUNTER]: ``,
+    [EmberStackError.NETWORK_STATUS_BAD_KEY_SEQUENCE_NUMBER]: ``,
+    [EmberStackError.NETWORK_STATUS_UNKNOWN_COMMAND]: ``,
+};
 
 /**
  * @see index.html for details on these references
@@ -158,9 +181,6 @@ export const IDEAL_ASH_COUNTERS: AshCounters = [
 
 export const IDEAL_ROUTER_RATIO = 0.5;
 
-/** 3 errors per devices over 100h */
-export const IDEAL_NETWORK_ROUTE_ERRORS_PER_DEVICE_PER_1H = 0.03;
-
 export const IDEAL_NCP_COUNTERS_FACTORS: [badFactor: number, veryBadFactor: number, higherBetter: boolean][] = [
     [5, 10, false],// MAC_RX_BROADCAST
     [5, 10, false],// MAC_TX_BROADCAST
@@ -177,7 +197,7 @@ export const IDEAL_NCP_COUNTERS_FACTORS: [badFactor: number, veryBadFactor: numb
     [1.3, 1.6, false],// ROUTE_DISCOVERY_INITIATED
     [0, 0, false],// NEIGHBOR_ADDED
     [0, 0, false],// NEIGHBOR_REMOVED
-    [5, 10, false],// NEIGHBOR_STALE
+    [3, 6, false],// NEIGHBOR_STALE
     [0, 0, false],// JOIN_INDICATION
     [0, 0, false],// CHILD_REMOVED
     [-1, -1, false],// ASH_OVERFLOW_ERROR
