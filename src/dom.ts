@@ -117,6 +117,19 @@ export function makeTable(headCols: string[], footCols: string[], rows: TableCel
     return table;
 }
 
+export function makeList(items: string[]): HTMLUListElement {
+    const list = document.createElement('ul');
+
+    for (const item of items) {
+        const listItem = document.createElement('li');
+        listItem.innerHTML = item;
+
+        list.appendChild(listItem);
+    }
+
+    return list;
+}
+
 export function makeListCard(title: string, listItems: string[]): HTMLDivElement {
     const card = document.createElement('div');
     card.className = 'card';
@@ -137,14 +150,7 @@ export function makeListCard(title: string, listItems: string[]): HTMLDivElement
     const content = document.createElement('div');
     content.className = 'content';
 
-    const list = document.createElement('ul');
-
-    for (const item of listItems) {
-        const listItem = document.createElement('li');
-        listItem.innerHTML = item;
-
-        list.appendChild(listItem);
-    }
+    const list = makeList(listItems);
 
     content.appendChild(list);
     cardContent.appendChild(content);

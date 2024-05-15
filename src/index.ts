@@ -26,7 +26,14 @@ import {
     TIMESTAMP_REGEX,
     DURATION_WARNING_FACTOR
 } from './consts';
-import { getValueClassName, makeListCard, makeMessage, makeTable, makeTableContainer } from './dom';
+import {
+    getValueClassName,
+    makeList,
+    makeListCard,
+    makeMessage,
+    makeTable,
+    makeTableContainer
+} from './dom';
 import {
     ASH_COUNTERS_NOTICE,
     IDEAL_ASH_COUNTERS,
@@ -709,14 +716,15 @@ window.onload = () => {
 
                     // only display msg for device if average per hour is high
                     if (deviceAvgPerHour > 0.1) {
-                        devices.push(`${k} / ${toHex(parseInt(k))} (${deviceAvgPerHour} error(s) per hour)`);
+                        devices.push(`${k} / ${toHex(parseInt(k))}: ${deviceAvgPerHour} error(s) per hour`);
                     }
                 }
 
                 if (devices.length > 0) {
                     // @ts-expect-error lookup by key
                     const notice = EMBER_STACK_ERRORS_NOTICE[EmberStackError[error]];
-                    const msg = makeMessage(`${error}`, `<p>For ${devices.join(', ')}.</p><p>${notice}</p>`, 'is-warning');
+                    const deviceList = makeList(devices).outerHTML;
+                    const msg = makeMessage(`${error}`, (notice !== '' ? `<p>${notice}</p><br>` : ``) + `<p>For devices: </p>${deviceList}`, 'is-warning');
 
                     $sectionRouting.appendChild(msg);
                 }
