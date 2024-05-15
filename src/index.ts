@@ -28,7 +28,6 @@ import {
 } from './consts';
 import {
     getValueClassName,
-    makeList,
     makeListCard,
     makeMessage,
     makeTable,
@@ -475,6 +474,7 @@ window.onload = () => {
                 ncpCountersHeader,
                 [],
                 ncpCountersRows,
+                true,
             ));
 
             {
@@ -631,6 +631,7 @@ window.onload = () => {
                 ashCountersHeader,
                 [],
                 ashCountersRows,
+                true,
             ));
 
             {
@@ -694,42 +695,56 @@ window.onload = () => {
 
                 errorsByDevice[error][device] = (errorsByDevice[error][device] === undefined) ? count : errorsByDevice[error][device] + count;
 
-                rows.push([
-                    { content: moment(entry[0]).format(timestampFormat) },
-                    { content: `${device} / ${toHex(device)}` },
-                    { content: error },
-                    { content: count.toString(), className: count > 2 ? 'is-danger' : (count > 1 ? 'is-warning' : undefined) },
-                ]);
+                if (count > 2) {
+                    rows.push([
+                        { content: moment(entry[0]).format(timestampFormat) },
+                        { content: `${device} / ${toHex(device)}` },
+                        { content: error },
+                        { content: count.toString() },
+                    ]);
+                }
             }
 
             const tableContainer = makeTableContainer(makeTable(
-                ['<span title="First occurence">Timestamp</span>', 'Device / Hex', 'Error', '<span title="Within a short period at and after Timestamp (i.e. failed retries)">Count</span>'],
+                ['<span title="First occurrence">Timestamp</span>', 'Device / Hex', 'Error', '<span title="Within a short period at and after Timestamp (i.e. failed retries)">Count</span>'],
                 [],
                 rows,
+                true,
             ));
 
             for (const error in errorsByDevice) {
-                const devices: string[] = [];
+                const rowsByError: TableCellData[][] = [];
 
                 for (const k in errorsByDevice[error]) {
                     const deviceAvgPerHour = round(errorsByDevice[error][k] / logMetadata.duration, 4);
 
                     // only display msg for device if average per hour is high
                     if (deviceAvgPerHour > 0.1) {
-                        devices.push(`${k} / ${toHex(parseInt(k))}: ${deviceAvgPerHour} error(s) per hour`);
+                        rowsByError.push([
+                            { content: `${k} / ${toHex(parseInt(k))}` },
+                            { content: deviceAvgPerHour.toString(), className: getValueClassName(deviceAvgPerHour, 0.1, 10, 20) },
+                        ]);
                     }
                 }
 
-                if (devices.length > 0) {
+                if (rowsByError.length > 0) {
+                    const tableContainer = makeTableContainer(makeTable(
+                        ['Device / Hex', 'Errors per hour'],
+                        [],
+                        rowsByError,
+                        true,
+                    ));
+
                     // @ts-expect-error lookup by key
                     const notice = EMBER_STACK_ERRORS_NOTICE[EmberStackError[error]];
-                    const deviceList = makeList(devices).outerHTML;
-                    const msg = makeMessage(`${error}`, (notice !== '' ? `<p>${notice}</p><br>` : ``) + `<p>For devices: </p>${deviceList}`, 'is-warning');
+                    const msg = makeMessage(`${error}`, (notice !== '') ? `<p>${notice}</p>` : ``, 'is-warning is-table-header');
 
                     $sectionRouting.appendChild(msg);
+                    $sectionRouting.appendChild(tableContainer);
                 }
             }
 
+            $sectionRouting.appendChild(makeMessage(`Errors appearing at least 3 times in succession`, ``, 'is-danger is-table-header'));
             $sectionRouting.appendChild(tableContainer);
         }
 

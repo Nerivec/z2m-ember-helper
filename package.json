@@ -1,6 +1,6 @@
 {
   "name": "z2m-ember-helper",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Get a better understanding of your Zigbee network using Zigbee2MQTT with Ember driver (for EmberZNet-based adapter).",
   "scripts": {
     "start": "parcel serve src/index.html",

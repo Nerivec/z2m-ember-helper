@@ -7,3 +7,22 @@
 .grid > .card {
     margin-bottom: 0;
 }
+
+.message.is-table-header {
+    margin-bottom: 0;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.message.is-table-header > .message-body {
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+th.is-sorted-asc::after {
+    content: ' ▲';
+}
+
+th.is-sorted-desc::after {
+    content: ' ▼';
+}
