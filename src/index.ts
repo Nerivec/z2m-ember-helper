@@ -482,91 +482,107 @@ window.onload = () => {
                     + ncpCountersSum[EmberCounterType.ASH_OVERRUN_ERROR] + ncpCountersSum[EmberCounterType.ASH_XOFF]);
 
                 if (ashErrors !== 0) {
-                    const msg = makeMessage('ASH errors detected', 'This can indicate a bad connection with the adapter or an issue with the driver installed in the operating system.', 'is-danger');
+                    const msg = makeMessage(
+                        `ASH errors detected (${ashErrors} times)`,
+                        'This can indicate a bad connection with the adapter or an issue with the driver installed in the operating system.',
+                        'is-danger'
+                    );
 
                     $sectionNcpCounters.appendChild(msg);
                 }
             }
 
             {
-                const cls = getValueClassName(
-                    ncpCounters.avgPerDevice[EmberCounterType.PHY_CCA_FAIL_COUNT],
-                    IDEAL_NCP_COUNTERS[EmberCounterType.PHY_CCA_FAIL_COUNT],
-                    ...IDEAL_NCP_COUNTERS_FACTORS[EmberCounterType.PHY_CCA_FAIL_COUNT]
-                );
+                const val = ncpCounters.avgPerDevice[EmberCounterType.PHY_CCA_FAIL_COUNT];
+                const ideal = IDEAL_NCP_COUNTERS[EmberCounterType.PHY_CCA_FAIL_COUNT];
+                const cls = getValueClassName(val, ideal, ...IDEAL_NCP_COUNTERS_FACTORS[EmberCounterType.PHY_CCA_FAIL_COUNT]);
 
                 if (cls !== undefined) {
-                    const msg = makeMessage('CCA failure count is high', 'This can indicate interferences on the 2.4GHz band on or around the current channel (WiFi, other Zigbee...).', cls);
+                    const msg = makeMessage(
+                        `CCA failure count is high (${val} vs ${ideal} "ideal")`,
+                        'This can indicate interferences on the 2.4GHz band on or around the current channel (WiFi, other Zigbee...).',
+                        cls
+                    );
 
                     $sectionNcpCounters.appendChild(msg);
                 }
             }
 
             {
-                const cls = getValueClassName(
-                    ncpCounters.avgPerDevice[EmberCounterType.ROUTE_DISCOVERY_INITIATED],
-                    IDEAL_NCP_COUNTERS[EmberCounterType.ROUTE_DISCOVERY_INITIATED],
-                    ...IDEAL_NCP_COUNTERS_FACTORS[EmberCounterType.ROUTE_DISCOVERY_INITIATED]
-                );
+                const val = ncpCounters.avgPerDevice[EmberCounterType.ROUTE_DISCOVERY_INITIATED];
+                const ideal = IDEAL_NCP_COUNTERS[EmberCounterType.ROUTE_DISCOVERY_INITIATED];
+                const cls = getValueClassName(val, ideal, ...IDEAL_NCP_COUNTERS_FACTORS[EmberCounterType.ROUTE_DISCOVERY_INITIATED]);
 
                 if (cls !== undefined) {
-                    const msg = makeMessage('Initiated route discovery count is high', 'This can indicate general instability in the network (unresponsive devices, bad routers...).', cls);
+                    const msg = makeMessage(
+                        `Initiated route discovery count is high (${val} vs ${ideal} "ideal")`,
+                        'This can indicate general instability in the network (unresponsive devices, bad routers...).',
+                        cls
+                    );
 
                     $sectionNcpCounters.appendChild(msg);
                 }
             }
 
             {
-                const cls = getValueClassName(
-                    ncpCounters.avgPerDevice[EmberCounterType.MAC_TX_UNICAST_RETRY],
-                    IDEAL_NCP_COUNTERS[EmberCounterType.MAC_TX_UNICAST_RETRY],
-                    ...IDEAL_NCP_COUNTERS_FACTORS[EmberCounterType.MAC_TX_UNICAST_RETRY]
-                );
+                const val = ncpCounters.avgPerDevice[EmberCounterType.MAC_TX_UNICAST_RETRY];
+                const ideal = IDEAL_NCP_COUNTERS[EmberCounterType.MAC_TX_UNICAST_RETRY];
+                const cls = getValueClassName(val, ideal, ...IDEAL_NCP_COUNTERS_FACTORS[EmberCounterType.MAC_TX_UNICAST_RETRY]);
 
                 if (cls !== undefined) {
-                    const msg = makeMessage('Packet retry count is high', 'This can indicate general instability in your network (unresponsive devices, bad routers...).', cls);
+                    const msg = makeMessage(
+                        `Packet retry count is high (${val} vs ${ideal} "ideal")`,
+                        'This can indicate general instability in your network (unresponsive devices, bad routers...).',
+                        cls
+                    );
 
                     $sectionNcpCounters.appendChild(msg);
                 }
             }
 
             {
-                const cls = getValueClassName(
-                    ncpCounters.avgPerDevice[EmberCounterType.ADDRESS_CONFLICT_SENT],
-                    IDEAL_NCP_COUNTERS[EmberCounterType.ADDRESS_CONFLICT_SENT],
-                    ...IDEAL_NCP_COUNTERS_FACTORS[EmberCounterType.ADDRESS_CONFLICT_SENT]
-                );
+                const val = ncpCounters.avgPerDevice[EmberCounterType.ADDRESS_CONFLICT_SENT];
+                const ideal = IDEAL_NCP_COUNTERS[EmberCounterType.ADDRESS_CONFLICT_SENT];
+                const cls = getValueClassName(val, ideal, ...IDEAL_NCP_COUNTERS_FACTORS[EmberCounterType.ADDRESS_CONFLICT_SENT]);
 
                 if (cls !== undefined) {
-                    const msg = makeMessage('Address conflicts detected', 'This can indicate device(s) with poor firmware.', cls);
+                    const msg = makeMessage(
+                        `Address conflicts detected (${val} vs ${ideal} "ideal")`,
+                        'This can indicate device(s) with poor firmware.',
+                        cls
+                    );
 
                     $sectionNcpCounters.appendChild(msg);
                 }
             }
 
             {
-                const cls = getValueClassName(
-                    ncpCounters.avgPerDevice[EmberCounterType.BROADCAST_TABLE_FULL],
-                    IDEAL_NCP_COUNTERS[EmberCounterType.BROADCAST_TABLE_FULL],
-                    ...IDEAL_NCP_COUNTERS_FACTORS[EmberCounterType.BROADCAST_TABLE_FULL]
-                );
+                const val = ncpCounters.avgPerDevice[EmberCounterType.BROADCAST_TABLE_FULL];
+                const ideal = IDEAL_NCP_COUNTERS[EmberCounterType.BROADCAST_TABLE_FULL];
+                const cls = getValueClassName(val, ideal, ...IDEAL_NCP_COUNTERS_FACTORS[EmberCounterType.BROADCAST_TABLE_FULL]);
 
                 if (cls !== undefined) {
-                    const msg = makeMessage('Broadcast table full detected', 'This can indicate the network is relying too heavily on broadcasts (messages to the whole network or to groups).', cls);
+                    const msg = makeMessage(
+                        `Broadcast table full detected (${val} vs ${ideal} "ideal")`,
+                        'This can indicate the network is relying too heavily on broadcasts (messages to the whole network or to groups).',
+                        cls
+                    );
 
                     $sectionNcpCounters.appendChild(msg);
                 }
             }
 
             {
-                const cls = getValueClassName(
-                    ncpCounters.avg[EmberCounterType.NEIGHBOR_STALE],
-                    1,
-                    ...IDEAL_NCP_COUNTERS_FACTORS[EmberCounterType.NEIGHBOR_STALE]
-                );
+                const val = ncpCounters.avg[EmberCounterType.NEIGHBOR_STALE];
+                const ideal = 1;
+                const cls = getValueClassName(val, ideal, ...IDEAL_NCP_COUNTERS_FACTORS[EmberCounterType.NEIGHBOR_STALE]);
 
                 if (cls !== undefined) {
-                    const msg = makeMessage('Stale neighbors count is high', 'This can indicate devices are regularly losing connection to the network.', cls);
+                    const msg = makeMessage(
+                        `Stale neighbors count is high (${val} vs ${ideal} "ideal")`,
+                        'This can indicate devices are regularly losing connection to the network.',
+                        cls
+                    );
 
                     $sectionNcpCounters.appendChild(msg);
                 }
@@ -635,28 +651,32 @@ window.onload = () => {
             ));
 
             {
-                const cls = getValueClassName(
-                    ashCounters.avgPerDevice[AshCounterType.TX_N1_FRAMES],
-                    IDEAL_ASH_COUNTERS[AshCounterType.TX_N1_FRAMES],
-                    ...IDEAL_ASH_COUNTERS_FACTORS[AshCounterType.TX_N1_FRAMES]
-                );
+                const val = ashCounters.avgPerDevice[AshCounterType.TX_N1_FRAMES];
+                const ideal = IDEAL_ASH_COUNTERS[AshCounterType.TX_N1_FRAMES]
+                const cls = getValueClassName(val, ideal, ...IDEAL_ASH_COUNTERS_FACTORS[AshCounterType.TX_N1_FRAMES]);
 
                 if (cls !== undefined) {
-                    const msg = makeMessage('"Not ready" transaction count is high', 'This can indicate heavy spamming from devices. Zigbee2MQTT was forced to regulate the flow.', cls);
+                    const msg = makeMessage(
+                        `"Not ready" transaction count is high (${val} vs ${ideal} "ideal")`,
+                        'This can indicate heavy spamming from devices. Zigbee2MQTT was forced to regulate the flow.',
+                        cls
+                    );
 
                     $sectionAshCounters.appendChild(msg);
                 }
             }
 
             {
-                const cls = getValueClassName(
-                    ashCounters.avgPerDevice[AshCounterType.RX_NO_BUFFER],
-                    IDEAL_ASH_COUNTERS[AshCounterType.RX_NO_BUFFER],
-                    ...IDEAL_ASH_COUNTERS_FACTORS[AshCounterType.RX_NO_BUFFER]
-                );
+                const val = ashCounters.avgPerDevice[AshCounterType.RX_NO_BUFFER];
+                const ideal = IDEAL_ASH_COUNTERS[AshCounterType.RX_NO_BUFFER];
+                const cls = getValueClassName(val, ideal, ...IDEAL_ASH_COUNTERS_FACTORS[AshCounterType.RX_NO_BUFFER]);
 
                 if (cls !== undefined) {
-                    const msg = makeMessage('Out of buffer count is high', 'This can indicate heavy spamming from devices. Zigbee2MQTT was forced to drop messages.', cls);
+                    const msg = makeMessage(
+                        `Out of buffer count is high (${val} vs ${ideal} "ideal")`,
+                        'This can indicate heavy spamming from devices. Zigbee2MQTT was forced to drop messages.',
+                        cls
+                    );
 
                     $sectionAshCounters.appendChild(msg);
                 }
@@ -669,7 +689,11 @@ window.onload = () => {
                 const cls = getValueClassName(rxBad, 1, 5, 10, false);
 
                 if (cls !== undefined) {
-                    const msg = makeMessage('Error count with received messages is high', 'This can indicate general instability (adapter/network).', cls);
+                    const msg = makeMessage(
+                        `Error count with received messages is high (${rxBad} times)`,
+                        'This can indicate general instability (adapter/network).',
+                        cls
+                    );
 
                     $sectionAshCounters.appendChild(msg);
                 }
