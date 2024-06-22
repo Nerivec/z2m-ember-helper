@@ -259,6 +259,7 @@
                 <div class="message-body">
                     <p>The start and stop sequences describe the steps taken to get Zigbee2MQTT running with `ember` in more details. This should help to locate potential start and stop problems.</p>
                     <p>Stack/Network status changes (up/down, channel change, open/close from Permit Join, etc).</p>
+                    <p><em>Network/Route error</em>: The error indicates that there was a problem sending/receiving messages from the target node (see below for more details). A few of these over time is expected (or on Zigbee2MQTT start), too many, too often, is indicative of a problem in your network.</p>
                 </div>
             </article>
             <article class="message is-warning">
@@ -267,7 +268,6 @@
                     <p><em>Node descriptor reports device is only compliant to revision</em>: Device identified as having an older Zigbee revision. These can be the source of problems, especially if `pre-21`.</p>
                     <p><em>[EzspConfigId] Failed to SET</em>: Usually when the coordinator has lower memory than others. In-firmware value will be used instead.</p>
                     <p><em>An ID conflict was detected</em>: Two devices cannot have the same ID on the same network. The involved devices are kicked off the network then should rejoin (may need to re-pair them if not).</p>
-                    <p><em>Network/Route error</em>: The error indicates that there was a problem sending/receiving messages from the target node (see below for more details). A few of these over time is expected (or on Zigbee2MQTT start), too many, too often, is indicative of a problem in your network.</p>
                     <p><em>NOT READY - Signaling NCP</em>: `ember` driver is temporarily overloaded. The coordinator is made aware and processing is deferred for a short period.</p>
                 </div>
             </article>
