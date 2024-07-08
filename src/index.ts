@@ -19,7 +19,6 @@ import {
     MIN_DURATION,
     NCP_COUNTERS_MATCH,
     NETWORK_ROUTE_ERRORS_MATCH,
-    NEW_LINE_REGEX,
     EMBER_COUNTERS_PER_DEVICE_IRRELEVANTS,
     ROUTING_ERROR_DUP_IGNORE_MS,
     START_OFFSET,
@@ -140,10 +139,11 @@ async function* makeTextFileLineIterator(file: File): AsyncGenerator<string, voi
     let { value, done } = await reader.read();
     let chunk = value ? utf8Decoder.decode(value, { stream: true }) : "";
 
+    const re = /\r\n|\n|\r/gm;
     let startIndex = 0;
 
     for (; ;) {
-        let result = NEW_LINE_REGEX.exec(chunk);
+        let result = re.exec(chunk);
 
         if (!result) {
             if (done) {
@@ -155,14 +155,14 @@ async function* makeTextFileLineIterator(file: File): AsyncGenerator<string, voi
             ({ value, done } = await reader.read());
 
             chunk = remainder + (value ? utf8Decoder.decode(value, { stream: true }) : "");
-            startIndex = NEW_LINE_REGEX.lastIndex = 0;
+            startIndex = re.lastIndex = 0;
 
             continue;
         }
 
         yield chunk.substring(startIndex, result.index);
 
-        startIndex = NEW_LINE_REGEX.lastIndex;
+        startIndex = re.lastIndex;
     }
 
     if (startIndex < chunk.length) {

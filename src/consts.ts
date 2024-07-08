@@ -3,7 +3,6 @@ import { EmberCounterType } from "./zh";
 export const EMBER_COUNTER_TYPE_COUNT = 41;
 export const ASH_COUNTER_TYPE_COUNT = 27;
 
-export const NEW_LINE_REGEX = /\r\n|\n|\r/gm;
 /** Offset used to ignore certain errors during/right after zigbee2mqtt start (in seconds). */
 export const START_OFFSET = 60000;
 /** Minimum duration (hours) for log analysis to be relevant. */
