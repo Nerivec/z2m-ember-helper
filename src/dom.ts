@@ -1,28 +1,34 @@
-import { ListItemStatus, TableCellData } from "./types";
+import { TableCellData } from './types';
 
 export type ValueClassName = 'is-danger' | 'is-warning';
 
-/**
- * If `badFactor` and `veryBadFactor` are -1, it means any value other than 0 should flag as is-danger
- * If `badFactor` and `veryBadFactor` are -2, it means any value other than 0 should flag as is-warning
- */
-export function getValueClassName(value: number, ideal: number, badFactor: number, veryBadFactor: number = 0, higherBetter: boolean = false): ValueClassName | undefined {
-    if (ideal !== 0 && badFactor !== 0) {
-        if (veryBadFactor === 0) {
-            veryBadFactor = badFactor * 2;
-        }
-
-        if (higherBetter ? (value < (ideal * veryBadFactor)) : (value > (ideal * veryBadFactor))) {
-            return 'is-danger';
-        } else if (higherBetter ? (value < (ideal * badFactor)) : (value > (ideal * badFactor))) {
-            return 'is-warning';
-        }
-    } else if (badFactor === -1 && veryBadFactor === -1) {
+// If `badFactor` and `veryBadFactor` are -1, it means any value other than 0 should flag as is-danger
+// If `badFactor` and `veryBadFactor` are -2, it means any value other than 0 should flag as is-warning
+export function getValueClassName(
+    value: number,
+    ideal: number,
+    badFactor: number,
+    veryBadFactor: number = 0,
+    higherBetter: boolean = false,
+): ValueClassName | undefined {
+    if (badFactor === -1 && veryBadFactor === -1) {
         if (value !== 0) {
             return 'is-danger';
         }
     } else if (badFactor === -2 && veryBadFactor === -2) {
         if (value !== 0) {
+            return 'is-warning';
+        }
+    } else if (ideal !== 0 && badFactor !== 0) {
+        if (veryBadFactor === 0) {
+            veryBadFactor = badFactor * 2;
+        }
+
+        if (higherBetter ? value < ideal * veryBadFactor : value > ideal * veryBadFactor) {
+            return 'is-danger';
+        }
+
+        if (higherBetter ? value < ideal * badFactor : value > ideal * badFactor) {
             return 'is-warning';
         }
     }
@@ -46,12 +52,20 @@ export function makeParagraph(text: string, className: string = ''): HTMLParagra
     return p;
 }
 
+export function makeButton(text: string, className: string = ''): HTMLAnchorElement {
+    const a = document.createElement('a');
+    a.textContent = text;
+    a.className = `button ${className}`;
+
+    return a;
+}
+
 export function makeTableContainer(table?: HTMLTableElement): HTMLDivElement {
     const container = document.createElement('div');
-    container.className = 'table-container pb-4';
+    container.className = 'table-container pb-2';
 
-    if (table != null) {
-        container.appendChild(table);
+    if (table) {
+        container.append(table);
     }
 
     return container;
@@ -62,32 +76,32 @@ export function makeTable(headCols: string[], footCols: string[], rows: TableCel
     const tBody = document.createElement('tbody');
     table.className = `table is-fullwidth is-narrow is-hoverable is-bordered ${sortable ? 'is-clickable' : ''}`;
 
-    if (headCols.length) {
+    if (headCols.length > 0) {
         const tHead = document.createElement('thead');
         const tr = document.createElement('tr');
-        const cols: HTMLTableCellElement[] = []
+        const cols: HTMLTableCellElement[] = [];
 
         for (const headCol of headCols) {
             const th = document.createElement('th');
             th.innerHTML = headCol;
 
-            tr.appendChild(th);
+            tr.append(th);
             cols.push(th);
         }
 
         if (sortable) {
-            for (let i = 0; i < cols.length; i++) {
-                cols[i].addEventListener('click', () => {
+            for (const [i, col] of cols.entries()) {
+                col.addEventListener('click', () => {
                     sortTable(tBody, i);
                 });
             }
         }
 
-        tHead.appendChild(tr);
-        table.appendChild(tHead);
+        tHead.append(tr);
+        table.append(tHead);
     }
 
-    if (rows.length) {
+    if (rows.length > 0) {
         for (const row of rows) {
             const tr = document.createElement('tr');
 
@@ -95,20 +109,20 @@ export function makeTable(headCols: string[], footCols: string[], rows: TableCel
                 const td = document.createElement('td');
                 td.innerHTML = cell.content;
 
-                if (cell.className != null) {
+                if (cell.className) {
                     td.className = cell.className;
                 }
 
-                tr.appendChild(td);
+                tr.append(td);
             }
 
-            tBody.appendChild(tr);
+            tBody.append(tr);
         }
     }
 
-    table.appendChild(tBody);
+    table.append(tBody);
 
-    if (footCols.length) {
+    if (footCols.length > 0) {
         const tFoot = document.createElement('tfoot');
         const tr = document.createElement('tr');
 
@@ -116,11 +130,11 @@ export function makeTable(headCols: string[], footCols: string[], rows: TableCel
             const th = document.createElement('th');
             th.innerHTML = footCol;
 
-            tr.appendChild(th);
+            tr.append(th);
         }
 
-        tFoot.appendChild(tr);
-        table.appendChild(tFoot);
+        tFoot.append(tr);
+        table.append(tFoot);
     }
 
     return table;
@@ -133,7 +147,7 @@ export function makeList(items: string[]): HTMLUListElement {
         const listItem = document.createElement('li');
         listItem.innerHTML = item;
 
-        list.appendChild(listItem);
+        list.append(listItem);
     }
 
     return list;
@@ -150,8 +164,8 @@ export function makeListCard(title: string, listItems: string[]): HTMLDivElement
     cardTitle.className = 'card-header-title';
     cardTitle.innerHTML = title;
 
-    cardHeader.appendChild(cardTitle);
-    card.appendChild(cardHeader);
+    cardHeader.append(cardTitle);
+    card.append(cardHeader);
 
     const cardContent = document.createElement('div');
     cardContent.className = 'card-content';
@@ -161,10 +175,10 @@ export function makeListCard(title: string, listItems: string[]): HTMLDivElement
 
     const list = makeList(listItems);
 
-    content.appendChild(list);
-    cardContent.appendChild(content);
-    card.appendChild(cardContent);
-    
+    content.append(list);
+    cardContent.append(content);
+    card.append(cardContent);
+
     return card;
 }
 
@@ -174,61 +188,50 @@ export function makeMessage(title: string, message: string, className: string = 
 
     const header = document.createElement('div');
     header.className = 'message-header';
-    header.innerText = title;
+    header.textContent = title;
 
-    article.appendChild(header);
+    article.append(header);
 
     if (message !== '') {
         const body = document.createElement('div');
         body.className = 'message-body';
         body.innerHTML = message;
 
-        article.appendChild(body);
+        article.append(body);
     }
 
     return article;
 }
 
 export function sortTable(tableBody: HTMLTableSectionElement, colIndex: number) {
-    const rowsArray = Array.from(tableBody.rows);
+    const rowsArray = [...tableBody.rows];
     let order: 'asc' | 'desc' = 'desc';
     const tableSorting = tableBody.getAttribute('sorting');
-    
-    if (tableSorting != null && tableSorting !== '') {
+
+    if (tableSorting && tableSorting !== '') {
         const lastSorting = tableSorting.split('.');
 
-        if (parseInt(lastSorting[0]) === colIndex && lastSorting[1] === 'desc') {
+        if (Number.parseInt(lastSorting[0], 10) === colIndex && lastSorting[1] === 'desc') {
             order = 'asc';
         }
     }
 
-    console.log(`Sorting table`, tableBody, colIndex, rowsArray, tableSorting, order);
-
-    let sortFn;
-
-    if (order === 'desc') {
-        sortFn = (a: HTMLTableRowElement, b: HTMLTableRowElement) => {
-            return b.cells[colIndex].innerHTML.localeCompare(a.cells[colIndex].innerHTML, undefined, { numeric: true });
-        }
-    } else {
-        sortFn = (a: HTMLTableRowElement, b: HTMLTableRowElement) => {
-            return a.cells[colIndex].innerHTML.localeCompare(b.cells[colIndex].innerHTML, undefined, { numeric: true });
-        }
-    }
+    const sortFn =
+        order === 'desc'
+            ? (a: HTMLTableRowElement, b: HTMLTableRowElement) =>
+                  b.cells[colIndex].innerHTML.localeCompare(a.cells[colIndex].innerHTML, undefined, { numeric: true })
+            : (a: HTMLTableRowElement, b: HTMLTableRowElement) =>
+                  a.cells[colIndex].innerHTML.localeCompare(b.cells[colIndex].innerHTML, undefined, { numeric: true });
 
     rowsArray.sort(sortFn);
 
     tableBody.setAttribute('sorting', `${colIndex}.${order}`);
-    
+
     const tableHeadCols = tableBody.previousElementSibling?.children[0];
 
-    if (tableHeadCols != undefined) {
+    if (tableHeadCols) {
         for (let i = 0; i < tableHeadCols.children.length; i++) {
-            if (i === colIndex) {
-                tableHeadCols.children[i].className = `is-sorted-${order}`;
-            } else {
-                tableHeadCols.children[i].className = '';
-            }
+            tableHeadCols.children[i].className = i === colIndex ? `is-sorted-${order}` : '';
         }
     }
 

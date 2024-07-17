@@ -107,7 +107,7 @@
         <article class="message">
             <div class="message-header">
                 <p>Zigbee2MQTT Ember Helper</p>
-                <a href="https://github.com/Nerivec/z2m-ember-helper/" target="_blank">Version: 1.1.3 [WIP]</button>
+                <a href="https://github.com/Nerivec/z2m-ember-helper/" target="_blank">Version: 1.2.0</button>
             </div>
             <div class="message-body">
                 <p>Get a better understanding of your Zigbee network using Zigbee2MQTT with Ember driver (for EmberZNet-based adapter).</p>
@@ -121,8 +121,7 @@
                 <p>Warning</p>
             </div>
             <div class="message-body">
-                <p>The information given and derived from this tool comes from a rather small set of data at the moment.</p>
-                <p>It is only meant to be indicative and may not be entirely relevant depending on your specific network/environment.</p>
+                <p>The information given is only meant to be indicative and may not be entirely relevant depending on your specific network/environment.</p>
                 <p>Values for identifying potential issues remain arbitrary until improved with more feedback.</p>
                 <p><em>Processing is done locally in your browser. Your log file doesn't leave your computer.</em></p>
             </div>
@@ -132,6 +131,10 @@
                 <p>Changelog</p>
             </div>
             <div class="message-body">
+                <p>[1.2.x]</p>
+                <p>- Add average for each hour</p>
+                <p>- Add failed pings detection.</p>
+                <hr>
                 <p>[1.1.x]</p>
                 <p>- Add ability to sort relevant tables. Improve Routing table 'by error' display.</p>
                 <p>- Improve Routing tab to more closely relate to the logic behind network/routing errors.</p>
@@ -236,28 +239,28 @@
             <article class="message is-info">
                 <div class="message-header">Info level</div>
                 <div class="message-body">
-                    <p>The start and stop sequences describe the steps taken to get Zigbee2MQTT running with `ember` in more details. This should help to locate potential start and stop problems.</p>
-                    <p>Stack/Network status changes (up/down, channel change, open/close from Permit Join, etc).</p>
-                    <p><em>Network/Route error</em>: The error indicates that there was a problem sending/receiving messages from the target node (see below for more details). A few of these over time is expected (or on Zigbee2MQTT start), too many, too often, is indicative of a problem in your network.</p>
+                    <p>- The start and stop sequences describe the steps taken to get Zigbee2MQTT running with `ember` in more details. This should help to locate potential start and stop problems.</p>
+                    <p>- Stack/Network status changes (up/down, channel change, open/close from Permit Join, etc).</p>
+                    <p>- <em>Network/Route error</em>: The error indicates that there was a problem sending/receiving messages from the target node (see below for more details). A few of these over time is expected (or on Zigbee2MQTT start), too many, too often, is indicative of a problem in your network.</p>
                 </div>
             </article>
             <article class="message is-warning">
                 <div class="message-header">Warning level</div>
                 <div class="message-body">
-                    <p><em>Node descriptor reports device is only compliant to revision</em>: Device identified as having an older Zigbee revision. These can be the source of problems, especially if `pre-21`.</p>
-                    <p><em>[EzspConfigId] Failed to SET</em>: Usually when the coordinator has lower memory than others. In-firmware value will be used instead.</p>
-                    <p><em>An ID conflict was detected</em>: Two devices cannot have the same ID on the same network. The involved devices are kicked off the network then should rejoin (may need to re-pair them if not).</p>
-                    <p><em>NOT READY - Signaling NCP</em>: `ember` driver is temporarily overloaded. The coordinator is made aware and processing is deferred for a short period.</p>
+                    <p>- <em>Node descriptor reports device is only compliant to revision</em>: Device identified as having an older Zigbee revision. These can be the source of problems, especially if `pre-21`.</p>
+                    <p>- <em>[EzspConfigId] Failed to SET</em>: Usually when the coordinator has lower memory than others. In-firmware value will be used instead.</p>
+                    <p>- <em>An ID conflict was detected</em>: Two devices cannot have the same ID on the same network. The involved devices are kicked off the network then should rejoin (may need to re-pair them if not).</p>
+                    <p>- <em>NOT READY - Signaling NCP</em>: `ember` driver is temporarily overloaded. The coordinator is made aware and processing is deferred for a short period.</p>
                 </div>
             </article>
             <article class="message is-danger">
                 <div class="message-header">Error level</div>
                 <div class="message-body">
-                    <p><em>NCP EZSP protocol version of XX does not match Host version 13</em>: `ember` currently requires a firmware with EZSP v13 (EmberZNet firmware 7.4.x). You will need to upgrade your adapter's firmware. <a href="https://github.com/Koenkk/zigbee2mqtt/discussions/21462" target="_blank">Check the first two posts here</a>.</p>
-                    <p><em>[BACKUP] Current backup file is from an unsupported EZSP version</em>: `ember` currently only supports EZSP v12 and above backups (can be identified by opening the `coordinator_backup.json` file). You will need to rename/move/delete the backup file. <em>An alternative is to upgrade your firmware to 7.3.1 and start `ezsp` once (which will create a more recent backup), then upgrade to 7.4.1 and switch to `ember`.</em></p>
-                    <p>Failed delivery of a message. The target device could not be reached. There can be several causes for this, the rest of the logs should help identify which.</p>
-                    <p>Failed request. Message should be self-explanatory, and give a `status` indicating the reason of the failure.</p>
-                    <p>NCP Fatal Error. The coordinator failed (the reason should be given in the message). Zigbee2MQTT will attempt to reset it and resume communication. If unsuccessful, Zigbee2MQTT will be stopped completely and the system's watchdog (if any) will attempt to restart it.</p>
+                    <p>- <em>NCP EZSP protocol version of XX does not match Host version 13</em>: `ember` currently requires a firmware with EZSP v13 (EmberZNet firmware 7.4.x). You will need to upgrade your adapter's firmware. <a href="https://github.com/Koenkk/zigbee2mqtt/discussions/21462" target="_blank">Check the first two posts here</a>.</p>
+                    <p>- <em>[BACKUP] Current backup file is from an unsupported EZSP version</em>: `ember` currently only supports EZSP v12 and above backups (can be identified by opening the `coordinator_backup.json` file). You will need to rename/move/delete the backup file. <em>An alternative is to upgrade your firmware to 7.3.1 and start `ezsp` once (which will create a more recent backup), then upgrade to 7.4.1 and switch to `ember`.</em></p>
+                    <p>- Failed delivery of a message. The target device could not be reached. There can be several causes for this, the rest of the logs should help identify which.</p>
+                    <p>- Failed request. Message should be self-explanatory, and give a `status` indicating the reason of the failure.</p>
+                    <p>- NCP Fatal Error. The coordinator failed (the reason should be given in the message). Zigbee2MQTT will attempt to reset it and resume communication. If unsuccessful, Zigbee2MQTT will be stopped completely and the system's watchdog (if any) will attempt to restart it.</p>
                 </div>
             </article>
             <article class="message">
@@ -265,9 +268,9 @@
                     <p>Details on Network/Route errors</p>
                 </div>
                 <div class="message-body">
-                    <p>A status of SOURCE_ROUTE_FAILURE indicates that a source-routed unicast sent from this node encountered a broken link. Note that this case occurs only if this node is a concentrator using many-to-one routing for inbound messages and source-routing for outbound messages. The node prior to the broken link generated the route error message and returned it to us along the many-to-one route.</p>
-                    <p>A status of MANY_TO_ONE_ROUTE_FAILURE also occurs only if the local device is a concentrator, and indicates that a unicast sent to the local device along a many-to-one route encountered a broken link. The node prior to the broken link generated the route error message and forwarded it to the local device via a randomly chosen neighbor, taking advantage of the many-to-one nature of the route.</p>
-                    <p>A status of MAC_INDIRECT_TIMEOUT indicates that a message sent to the target end device could not be delivered by the parent because the indirect transaction timer expired. Upon receipt of the route error, the stack sets the extended timeout for the target node in the address table, if present. It then calls this handler to indicate receipt of the error.</p>
+                    <p>- A status of SOURCE_ROUTE_FAILURE indicates that a source-routed unicast sent from this node encountered a broken link. Note that this case occurs only if this node is a concentrator using many-to-one routing for inbound messages and source-routing for outbound messages. The node prior to the broken link generated the route error message and returned it to us along the many-to-one route.</p>
+                    <p>- A status of MANY_TO_ONE_ROUTE_FAILURE also occurs only if the local device is a concentrator, and indicates that a unicast sent to the local device along a many-to-one route encountered a broken link. The node prior to the broken link generated the route error message and forwarded it to the local device via a randomly chosen neighbor, taking advantage of the many-to-one nature of the route.</p>
+                    <p>- A status of MAC_INDIRECT_TIMEOUT indicates that a message sent to the target end device could not be delivered by the parent because the indirect transaction timer expired. Upon receipt of the route error, the stack sets the extended timeout for the target node in the address table, if present. It then calls this handler to indicate receipt of the error.</p>
                     <p>A new route error message is generated for each failed retry. Therefore, it is not unusual to receive three route error messages in succession for a single failed retried APS unicast. On the other hand, it is also not guaranteed that any route error messages will be delivered successfully at all.</p>
                 </div>
             </article>
