@@ -89,7 +89,7 @@ const ncpCounters: LogNcpCounters = {
     all: [],
     avg: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     avgPerDevice: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    avgForHour: [
+    avgByHour: [
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -148,7 +148,7 @@ const ashCounters: LogAshCounters = {
     all: [],
     avg: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     avgPerDevice: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    avgForHour: [
+    avgByHour: [
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -202,8 +202,8 @@ function initVariables(): void {
     ncpCounters.avg.fill(0);
     ncpCounters.avgPerDevice.fill(0);
 
-    for (let i = 0; i < ncpCounters.avgForHour.length; i++) {
-        ncpCounters.avgForHour[i].fill(0);
+    for (let i = 0; i < ncpCounters.avgByHour.length; i++) {
+        ncpCounters.avgByHour[i].fill(0);
     }
 
     ashCountersSum.fill(0);
@@ -212,8 +212,8 @@ function initVariables(): void {
     ashCounters.avg.fill(0);
     ashCounters.avgPerDevice.fill(0);
 
-    for (let i = 0; i < ashCounters.avgForHour.length; i++) {
-        ashCounters.avgForHour[i].fill(0);
+    for (let i = 0; i < ashCounters.avgByHour.length; i++) {
+        ashCounters.avgByHour[i].fill(0);
     }
 
     networkRouteErrors.all = [];
@@ -297,7 +297,7 @@ function parseLogLine(line: string): void {
             // TODO: deal with 65535 & rollover
             const cI = counters[i];
             ncpCountersSum[i] += cI;
-            ncpCounters.avgForHour[hour][i] += cI;
+            ncpCounters.avgByHour[hour][i] += cI;
         }
 
         ncpCountersHoursCount[hour] += 1;
@@ -321,7 +321,7 @@ function parseLogLine(line: string): void {
         for (let i = 0; i < ASH_COUNTER_TYPE_COUNT; i++) {
             const cI = counters[i];
             ashCountersSum[i] += cI;
-            ashCounters.avgForHour[hour][i] += cI;
+            ashCounters.avgByHour[hour][i] += cI;
         }
 
         ashCountersHoursCount[hour] += 1;
@@ -410,9 +410,9 @@ async function parseLogFile(): Promise<void> {
         }
 
         // divide the computed sum to get actual average
-        for (let hour = 0; hour < ncpCounters.avgForHour.length; hour++) {
+        for (let hour = 0; hour < ncpCounters.avgByHour.length; hour++) {
             for (let counter = 0; counter < EMBER_COUNTER_TYPE_COUNT; counter++) {
-                ncpCounters.avgForHour[hour][counter] = round(ncpCounters.avgForHour[hour][counter] / ncpCountersHoursCount[hour], 2);
+                ncpCounters.avgByHour[hour][counter] = round(ncpCounters.avgByHour[hour][counter] / ncpCountersHoursCount[hour], 2);
             }
         }
     }
@@ -431,9 +431,9 @@ async function parseLogFile(): Promise<void> {
         }
 
         // divide the computed sum to get actual average
-        for (let hour = 0; hour < ashCounters.avgForHour.length; hour++) {
+        for (let hour = 0; hour < ashCounters.avgByHour.length; hour++) {
             for (let counter = 0; counter < EMBER_COUNTER_TYPE_COUNT; counter++) {
-                ashCounters.avgForHour[hour][counter] = round(ashCounters.avgForHour[hour][counter] / ashCountersHoursCount[hour], 2);
+                ashCounters.avgByHour[hour][counter] = round(ashCounters.avgByHour[hour][counter] / ashCountersHoursCount[hour], 2);
             }
         }
     }
@@ -553,10 +553,10 @@ function appendNCPCountersSection(section: HTMLDivElement): void {
             className: getValueClassName(counter, ideal, ...IDEAL_NCP_COUNTERS_FACTORS[i]),
         });
 
-        for (let hour = 0; hour < ncpCounters.avgForHour.length; hour++) {
+        for (let hour = 0; hour < ncpCounters.avgByHour.length; hour++) {
             ncpCountersAvgForHourRows[hour].push({
-                content: ncpCounters.avgForHour[hour][i].toString(),
-                className: getValueClassName(ncpCounters.avgForHour[hour][i], ideal * totalDevices, ...IDEAL_NCP_COUNTERS_FACTORS[i]),
+                content: ncpCounters.avgByHour[hour][i].toString(),
+                className: getValueClassName(ncpCounters.avgByHour[hour][i], ideal * totalDevices, ...IDEAL_NCP_COUNTERS_FACTORS[i]),
             });
         }
     }
@@ -806,10 +806,10 @@ function appendASHCountersSection(section: HTMLDivElement): void {
             className: getValueClassName(counter, ideal, ...IDEAL_ASH_COUNTERS_FACTORS[i]),
         });
 
-        for (let hour = 0; hour < ashCounters.avgForHour.length; hour++) {
+        for (let hour = 0; hour < ashCounters.avgByHour.length; hour++) {
             ashCountersAvgForHourRows[hour].push({
-                content: ashCounters.avgForHour[hour][i].toString(),
-                className: getValueClassName(ashCounters.avgForHour[hour][i], ideal * totalDevices, ...IDEAL_ASH_COUNTERS_FACTORS[i]),
+                content: ashCounters.avgByHour[hour][i].toString(),
+                className: getValueClassName(ashCounters.avgByHour[hour][i], ideal * totalDevices, ...IDEAL_ASH_COUNTERS_FACTORS[i]),
             });
         }
     }

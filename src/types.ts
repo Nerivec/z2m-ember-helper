@@ -67,7 +67,7 @@ export type LogNcpCounters = {
     avg: EmberCounters;
     avgPerDevice: EmberCounters;
     /* 0 = 12AM, 1 = 1AM, ..., 23 = 11PM */
-    avgForHour: readonly [
+    avgByHour: readonly [
         EmberCounters,
         EmberCounters,
         EmberCounters,
@@ -131,7 +131,7 @@ export type LogAshCounters = {
     avg: AshCounters;
     avgPerDevice: AshCounters;
     /* 0 = 12AM, 1 = 1AM, ..., 23 = 11PM */
-    avgForHour: readonly [
+    avgByHour: readonly [
         AshCounters,
         AshCounters,
         AshCounters,
