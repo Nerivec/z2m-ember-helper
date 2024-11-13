@@ -1,5 +1,5 @@
-import { AshCounters, EmberCounters } from './types';
-import { EmberStackError, MAX_TIME_MTORR_BROADCAST } from './zh';
+import { AshCounters, EmberCounters } from './types.js';
+import { EmberStackError, MAX_TIME_MTORR_BROADCAST } from './zh.js';
 
 export const NCP_COUNTERS_NOTICE: readonly string[] = [
     /* MAC_RX_BROADCAST */ `The MAC received a broadcast Data frame, Command frame, or Beacon.`,

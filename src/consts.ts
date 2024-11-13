@@ -1,4 +1,4 @@
-import { EmberCounterType } from './zh';
+import { EmberCounterType } from './zh.js';
 
 export const EMBER_COUNTER_TYPE_COUNT = 41;
 export const ASH_COUNTER_TYPE_COUNT = 27;

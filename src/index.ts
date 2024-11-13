@@ -1,5 +1,5 @@
 import moment from 'moment';
-import Notify from 'simple-notify';
+import Notify from 'simple-notify/dist/simple-notify.mjs';
 
 import {
     ASH_COUNTER_TYPE_COUNT,
@@ -16,7 +16,7 @@ import {
     ROUTING_ERROR_DUP_IGNORE_MS,
     START_OFFSET,
     TIMESTAMP_REGEX,
-} from './consts';
+} from './consts.js';
 import {
     ASH_COUNTERS_NOTICE,
     EMBER_STACK_ERRORS_NOTICE,
@@ -26,9 +26,9 @@ import {
     IDEAL_NCP_COUNTERS_FACTORS,
     IDEAL_ROUTER_RATIO,
     NCP_COUNTERS_NOTICE,
-} from './data';
-import { getValueClassName, makeButton, makeListCard, makeMessage, makeTable, makeTableContainer } from './dom';
-import { NotifyError } from './notify-error';
+} from './data.js';
+import { getValueClassName, makeButton, makeListCard, makeMessage, makeTable, makeTableContainer } from './dom.js';
+import { NotifyError } from './notify-error.js';
 import {
     AshCounters,
     EmberCounters,
@@ -38,16 +38,16 @@ import {
     LogNcpCounters,
     LogNetworkRouteErrors,
     TableCellData,
-} from './types';
-import { round, toHex } from './utils';
-import { AshCounterType, EmberCounterType, EmberStackError } from './zh';
+} from './types.js';
+import { round, toHex } from './utils.js';
+import { AshCounterType, EmberCounterType, EmberStackError } from './zh.js';
 
 /** z2m default */
 let timestampFormat: string = 'YYYY-MM-DD HH:mm:ss';
 let routers: number = 0;
 let endDevices: number = 0;
 let totalDevices: number = 0;
-let logFile: File;
+let logFile: File | undefined;
 const logMetadata: LogMetadata = {
     lines: 0,
     start: undefined,
@@ -188,7 +188,6 @@ function initVariables(): void {
     routers = 0;
     endDevices = 0;
     totalDevices = 0;
-    // @ts-expect-error whatever
     logFile = undefined;
     logMetadata.lines = 0;
     logMetadata.start = undefined;
@@ -242,7 +241,6 @@ async function* makeTextFileLineIterator(file: File): AsyncGenerator<string, voi
             ({ value, done } = await reader.read());
 
             chunk = remainder + (value ? utf8Decoder.decode(value, { stream: true }) : '');
-            // eslint-disable-next-line no-multi-assign
             startIndex = re.lastIndex = 0;
 
             continue;
@@ -991,11 +989,9 @@ function appendRoutingSection(section: HTMLDivElement): void {
         ),
     );
 
-    // eslint-disable-next-line guard-for-in
     for (const error in errorsByDevice) {
         const rowsByError: TableCellData[][] = [];
 
-        // eslint-disable-next-line guard-for-in
         for (const k in errorsByDevice[error]) {
             const deviceAvgPerHour = round(errorsByDevice[error][k] / logMetadata.duration, 4);
 
@@ -1138,7 +1134,6 @@ window.addEventListener('load', () => {
         }
 
         if (networkRouteErrors.all.length === 0) {
-            // eslint-disable-next-line no-new
             new Notify({
                 status: 'success',
                 title: 'No network/route error found',

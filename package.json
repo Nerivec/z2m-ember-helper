@@ -1,6 +1,6 @@
 {
   "name": "z2m-ember-helper",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "Get a better understanding of your Zigbee network using Zigbee2MQTT with Ember driver (for EmberZNet-based adapter).",
   "scripts": {
     "start": "parcel serve src/index.html",
@@ -9,7 +9,7 @@
     "clean-start": "npm run clean && npm run start",
     "clean-build": "npm run clean && npm run build",
     "deploy": "gh-pages -d dist",
-    "lint": "eslint . --ext .ts",
+    "lint": "eslint .",
     "format": "prettier --write \"src/**/*.ts\""
   },
   "repository": {
@@ -34,21 +34,21 @@
   },
   "homepage": "https://nerivec.github.io/z2m-ember-helper",
   "devDependencies": {
-    "@oclif/prettier-config": "^0.2.x",
-    "cross-env": "^7.0.x",
-    "eslint": "^8.57.0",
-    "eslint-config-oclif": "^5.2.0",
-    "eslint-config-oclif-typescript": "^3.1.8",
-    "eslint-config-prettier": "^9.1.0",
-    "gh-pages": "^6.1.x",
-    "parcel": "^2.12.x",
-    "prettier": "^3.3.x",
-    "rimraf": "^6.0.x",
-    "typescript": "^5.5.x"
+    "@eslint/js": "^9",
+    "@ianvs/prettier-plugin-sort-imports": "^4",
+    "cross-env": "^7",
+    "eslint": "^9",
+    "eslint-config-prettier": "^9",
+    "gh-pages": "^6",
+    "parcel": "^2",
+    "prettier": "^3",
+    "rimraf": "^6",
+    "typescript": "^5",
+    "typescript-eslint": "^8"
   },
   "dependencies": {
-    "moment": "^2.30.x",
-    "simple-notify": "^1.0.x"
+    "moment": "^2",
+    "simple-notify": "^1"
   },
   "type": "module"
 }

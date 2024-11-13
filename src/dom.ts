@@ -1,4 +1,4 @@
-import { TableCellData } from './types';
+import { TableCellData } from './types.js';
 
 export type ValueClassName = 'is-danger' | 'is-warning';
 
@@ -203,7 +203,7 @@ export function makeMessage(title: string, message: string, className: string = 
     return article;
 }
 
-export function sortTable(tableBody: HTMLTableSectionElement, colIndex: number) {
+export function sortTable(tableBody: HTMLTableSectionElement, colIndex: number): void {
     const rowsArray = [...tableBody.rows];
     let order: 'asc' | 'desc' = 'desc';
     const tableSorting = tableBody.getAttribute('sorting');
@@ -218,9 +218,9 @@ export function sortTable(tableBody: HTMLTableSectionElement, colIndex: number) 
 
     const sortFn =
         order === 'desc'
-            ? (a: HTMLTableRowElement, b: HTMLTableRowElement) =>
+            ? (a: HTMLTableRowElement, b: HTMLTableRowElement): number =>
                   b.cells[colIndex].innerHTML.localeCompare(a.cells[colIndex].innerHTML, undefined, { numeric: true })
-            : (a: HTMLTableRowElement, b: HTMLTableRowElement) =>
+            : (a: HTMLTableRowElement, b: HTMLTableRowElement): number =>
                   a.cells[colIndex].innerHTML.localeCompare(b.cells[colIndex].innerHTML, undefined, { numeric: true });
 
     rowsArray.sort(sortFn);

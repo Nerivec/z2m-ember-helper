@@ -4,4 +4,4 @@
 
 Get a better understanding of your Zigbee network using Zigbee2MQTT with Ember driver (for EmberZNet-based adapter).
 
-> This is still a work in progress.
+https://nerivec.github.io/z2m-ember-helper/
