@@ -1,12 +1,12 @@
-import moment from 'moment';
-import Notify from 'simple-notify/dist/simple-notify.mjs';
+import moment from "moment";
+import Notify from "simple-notify/dist/simple-notify.mjs";
 
 import {
-    ASH_COUNTER_TYPE_COUNT,
     ASH_COUNTERS_MATCH,
+    ASH_COUNTER_TYPE_COUNT,
     DURATION_WARNING_FACTOR,
-    EMBER_COUNTER_TYPE_COUNT,
     EMBER_COUNTERS_PER_DEVICE_IRRELEVANTS,
+    EMBER_COUNTER_TYPE_COUNT,
     FAILED_PING_1_ATTEMPT_MATCH,
     FAILED_PING_2_ATTEMPTS_MATCH,
     FAILED_PING_MATCH,
@@ -16,7 +16,7 @@ import {
     ROUTING_ERROR_DUP_IGNORE_MS,
     START_OFFSET,
     TIMESTAMP_REGEX,
-} from './consts.js';
+} from "./consts.js";
 import {
     ASH_COUNTERS_NOTICE,
     EMBER_STACK_ERRORS_NOTICE,
@@ -26,10 +26,10 @@ import {
     IDEAL_NCP_COUNTERS_FACTORS,
     IDEAL_ROUTER_RATIO,
     NCP_COUNTERS_NOTICE,
-} from './data.js';
-import { getValueClassName, makeButton, makeListCard, makeMessage, makeTable, makeTableContainer } from './dom.js';
-import { NotifyError } from './notify-error.js';
-import {
+} from "./data.js";
+import { getValueClassName, makeButton, makeListCard, makeMessage, makeTable, makeTableContainer } from "./dom.js";
+import { NotifyError } from "./notify-error.js";
+import type {
     AshCounters,
     EmberCounters,
     LogAshCounters,
@@ -38,15 +38,15 @@ import {
     LogNcpCounters,
     LogNetworkRouteErrors,
     TableCellData,
-} from './types.js';
-import { round, toHex } from './utils.js';
-import { AshCounterType, EmberCounterType, EmberStackError } from './zh.js';
+} from "./types.js";
+import { round, toHex } from "./utils.js";
+import { AshCounterType, EmberCounterType, EmberStackError } from "./zh.js";
 
 /** z2m default */
-let timestampFormat: string = 'YYYY-MM-DD HH:mm:ss';
-let routers: number = 0;
-let endDevices: number = 0;
-let totalDevices: number = 0;
+let timestampFormat = "YYYY-MM-DD HH:mm:ss";
+let routers = 0;
+let endDevices = 0;
+let totalDevices = 0;
 let logFile: File | undefined;
 const logMetadata: LogMetadata = {
     lines: 0,
@@ -220,10 +220,10 @@ function initVariables(): void {
 
 // Adapted @from https://developer.mozilla.org/en-US/docs/Web/API/ReadableStreamDefaultReader/read#example_2_-_handling_text_line_by_line
 async function* makeTextFileLineIterator(file: File): AsyncGenerator<string, void, unknown> {
-    const utf8Decoder = new TextDecoder('utf8');
+    const utf8Decoder = new TextDecoder("utf8");
     const reader = file.stream().getReader();
     let { value, done } = await reader.read();
-    let chunk = value ? utf8Decoder.decode(value, { stream: true }) : '';
+    let chunk = value ? utf8Decoder.decode(value, { stream: true }) : "";
 
     const re = /\r\n|\n|\r/gm;
     let startIndex = 0;
@@ -240,7 +240,7 @@ async function* makeTextFileLineIterator(file: File): AsyncGenerator<string, voi
 
             ({ value, done } = await reader.read());
 
-            chunk = remainder + (value ? utf8Decoder.decode(value, { stream: true }) : '');
+            chunk = remainder + (value ? utf8Decoder.decode(value, { stream: true }) : "");
             startIndex = re.lastIndex = 0;
 
             continue;
@@ -282,7 +282,7 @@ function parseLogLine(line: string): void {
 
     if (ncpCountersIndex !== -1) {
         const subLine = line.slice(ncpCountersIndex + NCP_COUNTERS_MATCH.length);
-        const counters = subLine.split(',').map((v) => Number.parseInt(v, 10));
+        const counters = subLine.split(",").map((v) => Number.parseInt(v, 10));
 
         if (counters.length !== EMBER_COUNTER_TYPE_COUNT) {
             return;
@@ -307,7 +307,7 @@ function parseLogLine(line: string): void {
 
     if (ashCountersIndex !== -1) {
         const subLine = line.slice(ashCountersIndex + ASH_COUNTERS_MATCH.length);
-        const counters = subLine.split(',').map((v) => Number.parseInt(v, 10));
+        const counters = subLine.split(",").map((v) => Number.parseInt(v, 10));
 
         if (counters.length !== ASH_COUNTER_TYPE_COUNT) {
             return;
@@ -336,7 +336,7 @@ function parseLogLine(line: string): void {
         }
 
         const subLine = line.slice(networkRouteErrorIndex + NETWORK_ROUTE_ERROR_MATCH.length);
-        const splitLine = subLine.split(' '); // ['ROUTE_ERROR_MANY_TO_ONE_ROUTE_FAILURE', 'for', '"38837".']
+        const splitLine = subLine.split(" "); // ['ROUTE_ERROR_MANY_TO_ONE_ROUTE_FAILURE', 'for', '"38837".']
         const error = splitLine[0];
         const device = Number.parseInt(splitLine[2].slice(1, -2), 10);
 
@@ -377,7 +377,7 @@ function parseLogLine(line: string): void {
 
 async function parseLogFile(): Promise<void> {
     if (!logFile) {
-        throw new NotifyError('Load a log file from the menu first.', 'No log file');
+        throw new NotifyError("Load a log file from the menu first.", "No log file");
     }
 
     for await (const line of makeTextFileLineIterator(logFile)) {
@@ -385,13 +385,13 @@ async function parseLogFile(): Promise<void> {
     }
 
     if (!logMetadata.start || !logMetadata.end) {
-        throw new NotifyError('Could not retrieve start or end timestamps from log file.', 'Invalid start or end timestamp');
+        throw new NotifyError("Could not retrieve start or end timestamps from log file.", "Invalid start or end timestamp");
     }
 
     logMetadata.duration = (logMetadata.end.getTime() - logMetadata.start.getTime()) / 1000 / 3600;
 
     if (logMetadata.duration < MIN_DURATION) {
-        throw new NotifyError('Log analysis over such a duration would be irrelevant.', 'Log duration too short');
+        throw new NotifyError("Log analysis over such a duration would be irrelevant.", "Log duration too short");
     }
 
     const ncpCountersCount = ncpCounters.all.length;
@@ -438,8 +438,8 @@ async function parseLogFile(): Promise<void> {
 }
 
 function appendStatsSection(section: HTMLDivElement): void {
-    const grid = document.createElement('div');
-    grid.className = 'grid';
+    const grid = document.createElement("div");
+    grid.className = "grid";
 
     const ratio = endDevices > 0 ? round(routers / endDevices, 2) : -1;
     const parametersList = [`Number of routers: ${routers}`, `Number of end devices: ${endDevices}`];
@@ -454,14 +454,14 @@ function appendStatsSection(section: HTMLDivElement): void {
         }
     }
 
-    const parametersCard = makeListCard('Parameters', parametersList);
+    const parametersCard = makeListCard("Parameters", parametersList);
     const warningDuration = logMetadata.duration < DURATION_WARNING_FACTOR;
-    const logFileCard = makeListCard('Log file', [
+    const logFileCard = makeListCard("Log file", [
         `Lines: ${logMetadata.lines}`,
         `Start: ${moment(logMetadata.start).format(timestampFormat)}`,
         `End: ${moment(logMetadata.end).format(timestampFormat)}`,
         `Ignore before (avoid starting "noise"): ${moment(logMetadata.startOffset).format(timestampFormat)}`,
-        `Duration: ${round(logMetadata.duration, 2)} hours ${warningDuration ? '<em class="has-text-warning">\u26A0 This is likely too low to get relevant statistics</em>' : ''}`,
+        `Duration: ${round(logMetadata.duration, 2)} hours ${warningDuration ? '<em class="has-text-warning">\u26A0 This is likely too low to get relevant statistics</em>' : ""}`,
         `NCP Counters: ${ncpCounters.all.length}`,
         `ASH Counters: ${ashCounters.all.length}`,
         `Network/Router Errors: ${networkRouteErrors.all.length}`,
@@ -488,8 +488,8 @@ function appendStatsSection(section: HTMLDivElement): void {
             section.append(
                 makeMessage(
                     `Too many failed pings for '${device}' (x${count})`,
-                    'This indicates an unreachable device on the network. If unavailable for long periods, consider disabling it to skip unnecessary network traffic.',
-                    'is-warning',
+                    "This indicates an unreachable device on the network. If unavailable for long periods, consider disabling it to skip unnecessary network traffic.",
+                    "is-warning",
                 ),
             );
         }
@@ -501,7 +501,7 @@ function appendNCPCountersSection(section: HTMLDivElement): void {
         return;
     }
 
-    const ncpCountersHeader: string[] = ['Timestamp'];
+    const ncpCountersHeader: string[] = ["Timestamp"];
     const ncpCountersRows: TableCellData[][] = [];
     const ncpCountersIdealRows: TableCellData[] = [];
     const ncpCountersAvgPerDeviceRows: TableCellData[] = [];
@@ -539,11 +539,11 @@ function appendNCPCountersSection(section: HTMLDivElement): void {
         const counter = ncpCounters.avgPerDevice[i];
         const ideal = IDEAL_NCP_COUNTERS[i];
 
-        ncpCountersIdealRows.push({ content: ideal.toString(), className: 'is-dark' });
+        ncpCountersIdealRows.push({ content: ideal.toString(), className: "is-dark" });
         ncpCountersAvgPerDeviceRows.push({
             content: counter.toString(),
             className: EMBER_COUNTERS_PER_DEVICE_IRRELEVANTS.includes(i)
-                ? 'is-invisible'
+                ? "is-invisible"
                 : getValueClassName(counter, ideal, ...IDEAL_NCP_COUNTERS_FACTORS[i]),
         });
         ncpCountersAvgRows.push({
@@ -561,45 +561,45 @@ function appendNCPCountersSection(section: HTMLDivElement): void {
 
     const tableContainerAvg = makeTableContainer(
         makeTable(
-            ['', ...ncpCountersHeader.slice(1)],
+            ["", ...ncpCountersHeader.slice(1)],
             [],
             [
-                [{ content: 'Ideal Per Device' }, ...ncpCountersIdealRows],
-                [{ content: 'Average Per Device' }, ...ncpCountersAvgPerDeviceRows],
-                [{ content: 'Average' }, ...ncpCountersAvgRows],
+                [{ content: "Ideal Per Device" }, ...ncpCountersIdealRows],
+                [{ content: "Average Per Device" }, ...ncpCountersAvgPerDeviceRows],
+                [{ content: "Average" }, ...ncpCountersAvgRows],
             ],
         ),
     );
 
     const tableContainerAvgForHour = makeTableContainer(
         makeTable(
-            ['Average Hour Before', ...ncpCountersHeader.slice(1)],
+            ["Average Hour Before", ...ncpCountersHeader.slice(1)],
             [],
             [
-                [{ content: '00 (12AM)' }, ...ncpCountersAvgForHourRows[0]],
-                [{ content: '01 (01AM)' }, ...ncpCountersAvgForHourRows[1]],
-                [{ content: '02 (02AM)' }, ...ncpCountersAvgForHourRows[2]],
-                [{ content: '03 (03AM)' }, ...ncpCountersAvgForHourRows[3]],
-                [{ content: '04 (04AM)' }, ...ncpCountersAvgForHourRows[4]],
-                [{ content: '05 (05AM)' }, ...ncpCountersAvgForHourRows[5]],
-                [{ content: '06 (06AM)' }, ...ncpCountersAvgForHourRows[6]],
-                [{ content: '07 (07AM)' }, ...ncpCountersAvgForHourRows[7]],
-                [{ content: '08 (08AM)' }, ...ncpCountersAvgForHourRows[8]],
-                [{ content: '09 (09AM)' }, ...ncpCountersAvgForHourRows[9]],
-                [{ content: '10 (10AM)' }, ...ncpCountersAvgForHourRows[10]],
-                [{ content: '11 (11AM)' }, ...ncpCountersAvgForHourRows[11]],
-                [{ content: '12 (12PM)' }, ...ncpCountersAvgForHourRows[12]],
-                [{ content: '13 (01PM)' }, ...ncpCountersAvgForHourRows[13]],
-                [{ content: '14 (02PM)' }, ...ncpCountersAvgForHourRows[14]],
-                [{ content: '15 (03PM)' }, ...ncpCountersAvgForHourRows[15]],
-                [{ content: '16 (04PM)' }, ...ncpCountersAvgForHourRows[16]],
-                [{ content: '17 (05PM)' }, ...ncpCountersAvgForHourRows[17]],
-                [{ content: '18 (06PM)' }, ...ncpCountersAvgForHourRows[18]],
-                [{ content: '19 (07PM)' }, ...ncpCountersAvgForHourRows[19]],
-                [{ content: '20 (08PM)' }, ...ncpCountersAvgForHourRows[20]],
-                [{ content: '21 (09PM)' }, ...ncpCountersAvgForHourRows[21]],
-                [{ content: '22 (10PM)' }, ...ncpCountersAvgForHourRows[22]],
-                [{ content: '23 (11PM)' }, ...ncpCountersAvgForHourRows[23]],
+                [{ content: "00 (12AM)" }, ...ncpCountersAvgForHourRows[0]],
+                [{ content: "01 (01AM)" }, ...ncpCountersAvgForHourRows[1]],
+                [{ content: "02 (02AM)" }, ...ncpCountersAvgForHourRows[2]],
+                [{ content: "03 (03AM)" }, ...ncpCountersAvgForHourRows[3]],
+                [{ content: "04 (04AM)" }, ...ncpCountersAvgForHourRows[4]],
+                [{ content: "05 (05AM)" }, ...ncpCountersAvgForHourRows[5]],
+                [{ content: "06 (06AM)" }, ...ncpCountersAvgForHourRows[6]],
+                [{ content: "07 (07AM)" }, ...ncpCountersAvgForHourRows[7]],
+                [{ content: "08 (08AM)" }, ...ncpCountersAvgForHourRows[8]],
+                [{ content: "09 (09AM)" }, ...ncpCountersAvgForHourRows[9]],
+                [{ content: "10 (10AM)" }, ...ncpCountersAvgForHourRows[10]],
+                [{ content: "11 (11AM)" }, ...ncpCountersAvgForHourRows[11]],
+                [{ content: "12 (12PM)" }, ...ncpCountersAvgForHourRows[12]],
+                [{ content: "13 (01PM)" }, ...ncpCountersAvgForHourRows[13]],
+                [{ content: "14 (02PM)" }, ...ncpCountersAvgForHourRows[14]],
+                [{ content: "15 (03PM)" }, ...ncpCountersAvgForHourRows[15]],
+                [{ content: "16 (04PM)" }, ...ncpCountersAvgForHourRows[16]],
+                [{ content: "17 (05PM)" }, ...ncpCountersAvgForHourRows[17]],
+                [{ content: "18 (06PM)" }, ...ncpCountersAvgForHourRows[18]],
+                [{ content: "19 (07PM)" }, ...ncpCountersAvgForHourRows[19]],
+                [{ content: "20 (08PM)" }, ...ncpCountersAvgForHourRows[20]],
+                [{ content: "21 (09PM)" }, ...ncpCountersAvgForHourRows[21]],
+                [{ content: "22 (10PM)" }, ...ncpCountersAvgForHourRows[22]],
+                [{ content: "23 (11PM)" }, ...ncpCountersAvgForHourRows[23]],
             ],
             true,
         ),
@@ -631,8 +631,8 @@ function appendNCPCountersSection(section: HTMLDivElement): void {
         if (ashErrors !== 0) {
             const msg = makeMessage(
                 `ASH errors detected (${ashErrors} times)`,
-                'This can indicate a bad connection with the adapter or an issue with the driver installed in the operating system.',
-                'is-danger',
+                "This can indicate a bad connection with the adapter or an issue with the driver installed in the operating system.",
+                "is-danger",
             );
 
             section.append(msg);
@@ -647,7 +647,7 @@ function appendNCPCountersSection(section: HTMLDivElement): void {
         if (cls) {
             const msg = makeMessage(
                 `CCA failure count is high (${val} vs ${ideal} "ideal")`,
-                'This can indicate interferences on the 2.4GHz band on or around the current channel (WiFi, other Zigbee...).',
+                "This can indicate interferences on the 2.4GHz band on or around the current channel (WiFi, other Zigbee...).",
                 cls,
             );
 
@@ -663,7 +663,7 @@ function appendNCPCountersSection(section: HTMLDivElement): void {
         if (cls) {
             const msg = makeMessage(
                 `Initiated route discovery count is high (${val} vs ${ideal} "ideal")`,
-                'This can indicate general instability in the network (unresponsive devices, bad routers...).',
+                "This can indicate general instability in the network (unresponsive devices, bad routers...).",
                 cls,
             );
 
@@ -679,7 +679,7 @@ function appendNCPCountersSection(section: HTMLDivElement): void {
         if (cls) {
             const msg = makeMessage(
                 `Packet retry count is high (${val} vs ${ideal} "ideal")`,
-                'This can indicate general instability in your network (unresponsive devices, bad routers...).',
+                "This can indicate general instability in your network (unresponsive devices, bad routers...).",
                 cls,
             );
 
@@ -695,7 +695,7 @@ function appendNCPCountersSection(section: HTMLDivElement): void {
         if (cls) {
             const msg = makeMessage(
                 `Address conflicts detected (${val} vs ${ideal} "ideal")`,
-                'This can indicate device(s) with poor firmware.',
+                "This can indicate device(s) with poor firmware.",
                 cls,
             );
 
@@ -711,7 +711,7 @@ function appendNCPCountersSection(section: HTMLDivElement): void {
         if (cls) {
             const msg = makeMessage(
                 `Broadcast table full detected (${val} vs ${ideal} "ideal")`,
-                'This can indicate the network is relying too heavily on broadcasts (messages to the whole network or to groups).',
+                "This can indicate the network is relying too heavily on broadcasts (messages to the whole network or to groups).",
                 cls,
             );
 
@@ -727,7 +727,7 @@ function appendNCPCountersSection(section: HTMLDivElement): void {
         if (cls) {
             const msg = makeMessage(
                 `Stale neighbors count is high (${val} vs ${ideal} "ideal")`,
-                'This can indicate poor link quality between devices. Note: This is influenced by pairing/re-pairing.',
+                "This can indicate poor link quality between devices. Note: This is influenced by pairing/re-pairing.",
                 cls,
             );
 
@@ -738,9 +738,9 @@ function appendNCPCountersSection(section: HTMLDivElement): void {
     section.append(tableContainerAvg);
     section.append(tableContainerAvgForHour);
 
-    const showAllButton = makeButton('Show All', 'is-primary');
+    const showAllButton = makeButton("Show All", "is-primary");
 
-    showAllButton.addEventListener('click', () => {
+    showAllButton.addEventListener("click", () => {
         showAllButton.remove();
 
         const tableContainerAll = makeTableContainer(makeTable(ncpCountersHeader, [], ncpCountersRows, true));
@@ -756,7 +756,7 @@ function appendASHCountersSection(section: HTMLDivElement): void {
         return;
     }
 
-    const ashCountersHeader: string[] = ['Timestamp'];
+    const ashCountersHeader: string[] = ["Timestamp"];
     const ashCountersRows: TableCellData[][] = [];
     const ashCountersIdealRows: TableCellData[] = [];
     const ashCountersAvgPerDeviceRows: TableCellData[] = [];
@@ -794,7 +794,7 @@ function appendASHCountersSection(section: HTMLDivElement): void {
         const counter = ashCounters.avgPerDevice[i];
         const ideal = IDEAL_ASH_COUNTERS[i];
 
-        ashCountersIdealRows.push({ content: ideal.toString(), className: 'is-dark' });
+        ashCountersIdealRows.push({ content: ideal.toString(), className: "is-dark" });
         ashCountersAvgPerDeviceRows.push({
             content: counter.toString(),
             className: getValueClassName(counter, ideal, ...IDEAL_ASH_COUNTERS_FACTORS[i]),
@@ -814,45 +814,45 @@ function appendASHCountersSection(section: HTMLDivElement): void {
 
     const tableContainerAvg = makeTableContainer(
         makeTable(
-            ['', ...ashCountersHeader.slice(1)],
+            ["", ...ashCountersHeader.slice(1)],
             [],
             [
-                [{ content: 'Ideal Per Device' }, ...ashCountersIdealRows],
-                [{ content: 'Average Per Device' }, ...ashCountersAvgPerDeviceRows],
-                [{ content: 'Average' }, ...ashCountersAvgRows],
+                [{ content: "Ideal Per Device" }, ...ashCountersIdealRows],
+                [{ content: "Average Per Device" }, ...ashCountersAvgPerDeviceRows],
+                [{ content: "Average" }, ...ashCountersAvgRows],
             ],
         ),
     );
 
     const tableContainerAvgForHour = makeTableContainer(
         makeTable(
-            ['Average Hour Before', ...ashCountersHeader.slice(1)],
+            ["Average Hour Before", ...ashCountersHeader.slice(1)],
             [],
             [
-                [{ content: '00 (12AM)' }, ...ashCountersAvgForHourRows[0]],
-                [{ content: '01 (01AM)' }, ...ashCountersAvgForHourRows[1]],
-                [{ content: '02 (02AM)' }, ...ashCountersAvgForHourRows[2]],
-                [{ content: '03 (03AM)' }, ...ashCountersAvgForHourRows[3]],
-                [{ content: '04 (04AM)' }, ...ashCountersAvgForHourRows[4]],
-                [{ content: '05 (05AM)' }, ...ashCountersAvgForHourRows[5]],
-                [{ content: '06 (06AM)' }, ...ashCountersAvgForHourRows[6]],
-                [{ content: '07 (07AM)' }, ...ashCountersAvgForHourRows[7]],
-                [{ content: '08 (08AM)' }, ...ashCountersAvgForHourRows[8]],
-                [{ content: '09 (09AM)' }, ...ashCountersAvgForHourRows[9]],
-                [{ content: '10 (10AM)' }, ...ashCountersAvgForHourRows[10]],
-                [{ content: '11 (11AM)' }, ...ashCountersAvgForHourRows[11]],
-                [{ content: '12 (12PM)' }, ...ashCountersAvgForHourRows[12]],
-                [{ content: '13 (01PM)' }, ...ashCountersAvgForHourRows[13]],
-                [{ content: '14 (02PM)' }, ...ashCountersAvgForHourRows[14]],
-                [{ content: '15 (03PM)' }, ...ashCountersAvgForHourRows[15]],
-                [{ content: '16 (04PM)' }, ...ashCountersAvgForHourRows[16]],
-                [{ content: '17 (05PM)' }, ...ashCountersAvgForHourRows[17]],
-                [{ content: '18 (06PM)' }, ...ashCountersAvgForHourRows[18]],
-                [{ content: '19 (07PM)' }, ...ashCountersAvgForHourRows[19]],
-                [{ content: '20 (08PM)' }, ...ashCountersAvgForHourRows[20]],
-                [{ content: '21 (09PM)' }, ...ashCountersAvgForHourRows[21]],
-                [{ content: '22 (10PM)' }, ...ashCountersAvgForHourRows[22]],
-                [{ content: '23 (11PM)' }, ...ashCountersAvgForHourRows[23]],
+                [{ content: "00 (12AM)" }, ...ashCountersAvgForHourRows[0]],
+                [{ content: "01 (01AM)" }, ...ashCountersAvgForHourRows[1]],
+                [{ content: "02 (02AM)" }, ...ashCountersAvgForHourRows[2]],
+                [{ content: "03 (03AM)" }, ...ashCountersAvgForHourRows[3]],
+                [{ content: "04 (04AM)" }, ...ashCountersAvgForHourRows[4]],
+                [{ content: "05 (05AM)" }, ...ashCountersAvgForHourRows[5]],
+                [{ content: "06 (06AM)" }, ...ashCountersAvgForHourRows[6]],
+                [{ content: "07 (07AM)" }, ...ashCountersAvgForHourRows[7]],
+                [{ content: "08 (08AM)" }, ...ashCountersAvgForHourRows[8]],
+                [{ content: "09 (09AM)" }, ...ashCountersAvgForHourRows[9]],
+                [{ content: "10 (10AM)" }, ...ashCountersAvgForHourRows[10]],
+                [{ content: "11 (11AM)" }, ...ashCountersAvgForHourRows[11]],
+                [{ content: "12 (12PM)" }, ...ashCountersAvgForHourRows[12]],
+                [{ content: "13 (01PM)" }, ...ashCountersAvgForHourRows[13]],
+                [{ content: "14 (02PM)" }, ...ashCountersAvgForHourRows[14]],
+                [{ content: "15 (03PM)" }, ...ashCountersAvgForHourRows[15]],
+                [{ content: "16 (04PM)" }, ...ashCountersAvgForHourRows[16]],
+                [{ content: "17 (05PM)" }, ...ashCountersAvgForHourRows[17]],
+                [{ content: "18 (06PM)" }, ...ashCountersAvgForHourRows[18]],
+                [{ content: "19 (07PM)" }, ...ashCountersAvgForHourRows[19]],
+                [{ content: "20 (08PM)" }, ...ashCountersAvgForHourRows[20]],
+                [{ content: "21 (09PM)" }, ...ashCountersAvgForHourRows[21]],
+                [{ content: "22 (10PM)" }, ...ashCountersAvgForHourRows[22]],
+                [{ content: "23 (11PM)" }, ...ashCountersAvgForHourRows[23]],
             ],
             true,
         ),
@@ -882,7 +882,7 @@ function appendASHCountersSection(section: HTMLDivElement): void {
         if (cls) {
             const msg = makeMessage(
                 `"Not ready" transaction count is high (${val} vs ${ideal} "ideal")`,
-                'This can indicate heavy spamming from devices. Zigbee2MQTT was forced to regulate the flow.',
+                "This can indicate heavy spamming from devices. Zigbee2MQTT was forced to regulate the flow.",
                 cls,
             );
 
@@ -898,7 +898,7 @@ function appendASHCountersSection(section: HTMLDivElement): void {
         if (cls) {
             const msg = makeMessage(
                 `Out of buffer count is high (${val} vs ${ideal} "ideal")`,
-                'This can indicate heavy spamming from devices. Zigbee2MQTT was forced to drop messages.',
+                "This can indicate heavy spamming from devices. Zigbee2MQTT was forced to drop messages.",
                 cls,
             );
 
@@ -922,7 +922,7 @@ function appendASHCountersSection(section: HTMLDivElement): void {
         if (cls) {
             const msg = makeMessage(
                 `Error count with received messages is high (${rxBad} times)`,
-                'This can indicate general instability (adapter/network).',
+                "This can indicate general instability (adapter/network).",
                 cls,
             );
 
@@ -933,9 +933,9 @@ function appendASHCountersSection(section: HTMLDivElement): void {
     section.append(tableContainerAvg);
     section.append(tableContainerAvgForHour);
 
-    const showAllButton = makeButton('Show All', 'is-primary');
+    const showAllButton = makeButton("Show All", "is-primary");
 
-    showAllButton.addEventListener('click', () => {
+    showAllButton.addEventListener("click", () => {
         showAllButton.remove();
 
         const tableContainerAll = makeTableContainer(makeTable(ashCountersHeader, [], ashCountersRows, true));
@@ -979,8 +979,8 @@ function appendRoutingSection(section: HTMLDivElement): void {
         makeTable(
             [
                 '<span title="First occurrence">Timestamp</span>',
-                'Device / Hex',
-                'Error',
+                "Device / Hex",
+                "Error",
                 '<span title="Within a short period at and after Timestamp (i.e. failed retries)">Count</span>',
             ],
             [],
@@ -1005,39 +1005,39 @@ function appendRoutingSection(section: HTMLDivElement): void {
         }
 
         if (rowsByError.length > 0) {
-            const tableContainer = makeTableContainer(makeTable(['Device / Hex', 'Errors per hour'], [], rowsByError, true));
+            const tableContainer = makeTableContainer(makeTable(["Device / Hex", "Errors per hour"], [], rowsByError, true));
 
             const notice = EMBER_STACK_ERRORS_NOTICE[EmberStackError[error as keyof typeof EmberStackError]];
-            const msg = makeMessage(`${error}`, notice === '' ? `` : `<p>${notice}</p>`, 'is-warning is-table-header');
+            const msg = makeMessage(`${error}`, notice === "" ? "" : `<p>${notice}</p>`, "is-warning is-table-header");
 
             section.append(msg);
             section.append(tableContainer);
         }
     }
 
-    section.append(makeMessage(`Errors appearing at least 3 times in succession`, ``, 'is-danger is-table-header'));
+    section.append(makeMessage("Errors appearing at least 3 times in succession", "", "is-danger is-table-header"));
     section.append(tableContainer);
 }
 
-window.addEventListener('load', () => {
+window.addEventListener("load", () => {
     initVariables();
 
-    const $loadForm = document.querySelector('#log-file-form')! as HTMLFormElement;
-    const $heroBody = document.querySelector('#hero-body')!;
-    const $menuHomeLink = document.querySelector('#menu-home')! as HTMLLinkElement;
-    const $sectionHome = document.querySelector('#section-home')! as HTMLDivElement;
-    const $menuStatsLink = document.querySelector('#menu-stats')! as HTMLLinkElement;
-    const $sectionStats = document.querySelector('#section-stats')! as HTMLDivElement;
-    const $menuNcpCountersLink = document.querySelector('#menu-ncp-counters')! as HTMLLinkElement;
-    const $sectionNcpCounters = document.querySelector('#section-ncp-counters')! as HTMLDivElement;
-    const $menuAshCountersLink = document.querySelector('#menu-ash-counters')! as HTMLLinkElement;
-    const $sectionAshCounters = document.querySelector('#section-ash-counters')! as HTMLDivElement;
-    const $menuRoutingLink = document.querySelector('#menu-routing')! as HTMLLinkElement;
-    const $sectionRouting = document.querySelector('#section-routing')! as HTMLDivElement;
-    const $menuToolsLink = document.querySelector('#menu-tools')! as HTMLLinkElement;
-    const $sectionTools = document.querySelector('#section-tools')! as HTMLDivElement;
-    const $menuHelpLink = document.querySelector('#menu-help')! as HTMLLinkElement;
-    const $sectionHelp = document.querySelector('#section-help')! as HTMLDivElement;
+    const $loadForm = document.querySelector("#log-file-form")! as HTMLFormElement;
+    const $heroBody = document.querySelector("#hero-body")!;
+    const $menuHomeLink = document.querySelector("#menu-home")! as HTMLLinkElement;
+    const $sectionHome = document.querySelector("#section-home")! as HTMLDivElement;
+    const $menuStatsLink = document.querySelector("#menu-stats")! as HTMLLinkElement;
+    const $sectionStats = document.querySelector("#section-stats")! as HTMLDivElement;
+    const $menuNcpCountersLink = document.querySelector("#menu-ncp-counters")! as HTMLLinkElement;
+    const $sectionNcpCounters = document.querySelector("#section-ncp-counters")! as HTMLDivElement;
+    const $menuAshCountersLink = document.querySelector("#menu-ash-counters")! as HTMLLinkElement;
+    const $sectionAshCounters = document.querySelector("#section-ash-counters")! as HTMLDivElement;
+    const $menuRoutingLink = document.querySelector("#menu-routing")! as HTMLLinkElement;
+    const $sectionRouting = document.querySelector("#section-routing")! as HTMLDivElement;
+    const $menuToolsLink = document.querySelector("#menu-tools")! as HTMLLinkElement;
+    const $sectionTools = document.querySelector("#section-tools")! as HTMLDivElement;
+    const $menuHelpLink = document.querySelector("#menu-help")! as HTMLLinkElement;
+    const $sectionHelp = document.querySelector("#section-help")! as HTMLDivElement;
     const menu: [HTMLLinkElement, HTMLDivElement][] = [
         [$menuHomeLink, $sectionHome],
         [$menuStatsLink, $sectionStats],
@@ -1049,44 +1049,44 @@ window.addEventListener('load', () => {
     ];
 
     for (const [$link, $section] of menu) {
-        $link.addEventListener('click', () => {
+        $link.addEventListener("click", () => {
             // li
-            $link.parentElement!.className = 'is-active';
-            $section.className = 'section';
+            $link.parentElement!.className = "is-active";
+            $section.className = "section";
 
             for (const [$otherLink, $otherSection] of menu.filter((m) => m[0] !== $link)) {
-                $otherLink.parentElement!.className = '';
-                $otherSection.className = 'section is-hidden';
+                $otherLink.parentElement!.className = "";
+                $otherSection.className = "section is-hidden";
             }
         });
     }
 
-    $loadForm.addEventListener('submit', async (event: SubmitEvent) => {
+    $loadForm.addEventListener("submit", async (event: SubmitEvent) => {
         event.preventDefault();
         initVariables();
         const data = new FormData($loadForm);
 
-        timestampFormat = data.get('timestamp-format') as string;
+        timestampFormat = data.get("timestamp-format") as string;
 
-        routers = Number.parseInt(data.get('number-routers') as string, 10);
+        routers = Number.parseInt(data.get("number-routers") as string, 10);
 
         if (Number.isNaN(routers) || routers < 0) {
-            throw new NotifyError('Number of routers must be at least 0.', 'Invalid number of routers');
+            throw new NotifyError("Number of routers must be at least 0.", "Invalid number of routers");
         }
 
-        endDevices = Number.parseInt(data.get('number-devices') as string, 10);
+        endDevices = Number.parseInt(data.get("number-devices") as string, 10);
 
         if (Number.isNaN(endDevices) || endDevices < 0) {
-            throw new NotifyError('Number of end devices must be at least 0.', 'Invalid number of end devices');
+            throw new NotifyError("Number of end devices must be at least 0.", "Invalid number of end devices");
         }
 
         totalDevices = routers + endDevices;
 
         if (Number.isNaN(totalDevices) || totalDevices <= 0) {
-            throw new NotifyError('Total number of devices must be at least 1.', 'Invalid total number of devices');
+            throw new NotifyError("Total number of devices must be at least 1.", "Invalid total number of devices");
         }
 
-        logFile = data.get('log-file') as File;
+        logFile = data.get("log-file") as File;
 
         await parseLogFile();
 
@@ -1095,54 +1095,54 @@ window.addEventListener('load', () => {
         appendASHCountersSection($sectionAshCounters);
         appendRoutingSection($sectionRouting);
 
-        $heroBody.className = 'is-hidden';
+        $heroBody.className = "is-hidden";
 
         $menuStatsLink.click();
     });
 
-    $menuHomeLink.addEventListener('click', async () => {});
+    $menuHomeLink.addEventListener("click", async () => {});
 
-    $menuStatsLink.addEventListener('click', async () => {
+    $menuStatsLink.addEventListener("click", () => {
         if (!logFile) {
-            throw new NotifyError('Load a log file from the menu first.', 'No log file');
+            throw new NotifyError("Load a log file from the menu first.", "No log file");
         }
     });
 
-    $menuNcpCountersLink.addEventListener('click', async () => {
+    $menuNcpCountersLink.addEventListener("click", () => {
         if (!logFile) {
-            throw new NotifyError('Load a log file from the menu first.', 'No log file');
+            throw new NotifyError("Load a log file from the menu first.", "No log file");
         }
 
         if (ncpCounters.all.length === 0) {
-            throw new NotifyError('No NCP counters were found in the given log file.', 'No NCP counters found');
+            throw new NotifyError("No NCP counters were found in the given log file.", "No NCP counters found");
         }
     });
 
-    $menuAshCountersLink.addEventListener('click', async () => {
+    $menuAshCountersLink.addEventListener("click", () => {
         if (!logFile) {
-            throw new NotifyError('Load a log file from the menu first.', 'No log file');
+            throw new NotifyError("Load a log file from the menu first.", "No log file");
         }
 
         if (ashCounters.all.length === 0) {
-            throw new NotifyError('No ASH counters were found in the given log file.', 'No ASH counters found');
+            throw new NotifyError("No ASH counters were found in the given log file.", "No ASH counters found");
         }
     });
 
-    $menuRoutingLink.addEventListener('click', async () => {
+    $menuRoutingLink.addEventListener("click", () => {
         if (!logFile) {
-            throw new NotifyError('Load a log file from the menu first.', 'No log file');
+            throw new NotifyError("Load a log file from the menu first.", "No log file");
         }
 
         if (networkRouteErrors.all.length === 0) {
             new Notify({
-                status: 'success',
-                title: 'No network/route error found',
-                text: `No network/router error was found in the given log file.`,
+                status: "success",
+                title: "No network/route error found",
+                text: "No network/router error was found in the given log file.",
             });
         }
     });
 
-    $menuToolsLink.addEventListener('click', async () => {});
+    $menuToolsLink.addEventListener("click", () => {});
 
     // add dynamic part of the help section
     {
@@ -1156,7 +1156,7 @@ window.addEventListener('load', () => {
             ]);
         }
 
-        const ncpCountersTable = makeTableContainer(makeTable(['NCP Counter', 'Ideal (Per Device)', 'Note'], [], ncpCountersRows));
+        const ncpCountersTable = makeTableContainer(makeTable(["NCP Counter", "Ideal (Per Device)", "Note"], [], ncpCountersRows));
 
         const ashCountersRows: TableCellData[][] = [];
 
@@ -1168,7 +1168,7 @@ window.addEventListener('load', () => {
             ]);
         }
 
-        const ashCountersTable = makeTableContainer(makeTable(['ASH Counter', 'Ideal (Per Device)', 'Note'], [], ashCountersRows));
+        const ashCountersTable = makeTableContainer(makeTable(["ASH Counter", "Ideal (Per Device)", "Note"], [], ashCountersRows));
 
         $sectionHelp.append(ncpCountersTable);
         $sectionHelp.append(ashCountersTable);

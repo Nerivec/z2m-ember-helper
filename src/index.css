@@ -1,4 +1,4 @@
-@import 'npm:simple-notify/dist/simple-notify.css';
+@import "npm:simple-notify/dist/simple-notify.css";
 
 .navbar-item {
     color: white;
@@ -20,9 +20,9 @@
 }
 
 th.is-sorted-asc::after {
-    content: ' ▲';
+    content: " ▲";
 }
 
 th.is-sorted-desc::after {
-    content: ' ▼';
+    content: " ▼";
 }

@@ -1,4 +1,4 @@
-export type ListItemStatus = 'disabled' | 'error' | 'success' | 'unknown' | 'warning';
+export type ListItemStatus = "disabled" | "error" | "success" | "unknown" | "warning";
 export type ListItemParams = [name: string, subject: string, desc: string, status?: ListItemStatus];
 
 export type LogMetadata = {
