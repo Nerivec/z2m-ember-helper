@@ -200,6 +200,8 @@ export enum EmberCounterType {
     PTA_HI_PRI_TX_ABORTED = 39,
     /** The number of times an address conflict has caused node_id change, and an address conflict error is sent. */
     ADDRESS_CONFLICT_SENT = 40,
+    /** The number of times CSL failed to schedule Rx on target */
+    CSL_RX_SCHEDULE_FAILED = 41,
 }
 
 export enum AshCounterType {

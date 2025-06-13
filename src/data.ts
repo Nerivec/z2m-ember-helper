@@ -145,6 +145,7 @@ export const IDEAL_NCP_COUNTERS: EmberCounters = [
     0, // PTA_LO_PRI_TX_ABORTED
     0, // PTA_HI_PRI_TX_ABORTED
     0, // ADDRESS_CONFLICT_SENT
+    0, // CSL_RX_SCHEDULE_FAILED
 ];
 
 /**
@@ -224,6 +225,7 @@ export const IDEAL_NCP_COUNTERS_FACTORS: [badFactor: number, veryBadFactor: numb
     [0, 0, false], // PTA_LO_PRI_TX_ABORTED
     [0, 0, false], // PTA_HI_PRI_TX_ABORTED
     [-2, -2, false], // ADDRESS_CONFLICT_SENT
+    [-2, -2, false], // CSL_RX_SCHEDULE_FAILED
 ];
 
 export const IDEAL_ASH_COUNTERS_FACTORS: [badFactor: number, veryBadFactor: number, higherBetter: boolean][] = [

@@ -1,6 +1,6 @@
 import { EmberCounterType } from "./zh.js";
 
-export const EMBER_COUNTER_TYPE_COUNT = 41;
+export const EMBER_COUNTER_TYPE_COUNT = 42;
 export const ASH_COUNTER_TYPE_COUNT = 27;
 
 /** Offset used to ignore certain errors during/right after zigbee2mqtt start (in seconds). */

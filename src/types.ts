@@ -60,6 +60,7 @@ export type EmberCounters = [
     number,
     number,
     number,
+    number,
 ];
 
 export type LogNcpCounters = {
