@@ -36,7 +36,7 @@
     "@biomejs/biome": "^2.2.4",
     "cross-env": "^7.0.3",
     "gh-pages": "^6.3.0",
-    "parcel": "^2.15.4",
+    "parcel": "^2.16.0",
     "typescript": "^5.9.2"
   },
   "dependencies": {
