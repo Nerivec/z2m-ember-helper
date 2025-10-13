@@ -33,7 +33,7 @@
   },
   "homepage": "https://nerivec.github.io/z2m-ember-helper",
   "devDependencies": {
-    "@biomejs/biome": "^2.2.5",
+    "@biomejs/biome": "^2.2.6",
     "cross-env": "^10.1.0",
     "gh-pages": "^6.3.0",
     "parcel": "^2.16.0",
