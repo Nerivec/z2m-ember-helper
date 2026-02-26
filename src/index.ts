@@ -47,6 +47,7 @@ let routers = 0;
 let endDevices = 0;
 let totalDevices = 0;
 let logFile: File | undefined;
+let logFileEncoding: "utf-8" | "utf-16le" | undefined;
 const logMetadata: LogMetadata = {
     lines: 0,
     start: undefined,
@@ -218,8 +219,8 @@ function initVariables(): void {
 }
 
 // Adapted @from https://developer.mozilla.org/en-US/docs/Web/API/ReadableStreamDefaultReader/read#example_2_-_handling_text_line_by_line
-async function* makeTextFileLineIterator(file: File): AsyncGenerator<string, void, unknown> {
-    const utf8Decoder = new TextDecoder("utf8");
+async function* makeTextFileLineIterator(file: File, encoding: "utf-8" | "utf-16le"): AsyncGenerator<string, void, unknown> {
+    const utf8Decoder = new TextDecoder(encoding);
     const reader = file.stream().getReader();
     let { value, done } = await reader.read();
     let chunk = value ? utf8Decoder.decode(value, { stream: true }) : "";
@@ -374,12 +375,12 @@ function parseLogLine(line: string): void {
     }
 }
 
-async function parseLogFile(): Promise<void> {
+async function parseLogFile(encoding: "utf-8" | "utf-16le"): Promise<void> {
     if (!logFile) {
         throw new NotifyError("Load a log file from the menu first.", "No log file");
     }
 
-    for await (const line of makeTextFileLineIterator(logFile)) {
+    for await (const line of makeTextFileLineIterator(logFile, encoding)) {
         parseLogLine(line);
     }
 
@@ -1086,8 +1087,9 @@ window.addEventListener("load", () => {
         }
 
         logFile = data.get("log-file") as File;
+        logFileEncoding = data.get("log-file-encoding") as "utf-8" | "utf-16le";
 
-        await parseLogFile();
+        await parseLogFile(logFileEncoding);
 
         appendStatsSection($sectionStats);
         appendNCPCountersSection($sectionNcpCounters);

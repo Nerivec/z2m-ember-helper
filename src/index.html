@@ -25,7 +25,7 @@
                     <div class="navbar-menu">
                         <div class="navbar-start">
                             <span class="navbar-item">
-                                <button onClick="window.location.reload();" class="button is-primary">
+                                <button type="button" onClick="window.location.reload();" class="button is-primary">
                                     <span class="icon">&circlearrowright;</span>
                                     <span>Reload</span>
                                 </button>
@@ -50,7 +50,7 @@
             <form id="log-file-form" class="is-flex is-flex-direction-column is-justify-content-center is-align-items-center">
                 <div class="field has-addons" title="Log File Timestamp Format (same as configured in Zigbee2MQTT)">
                     <p class="control">
-                        <a class="button is-static">&#x1F4C5; Log File Timestamp Format</a>
+                        <a class="button is-static">📅 Log File Timestamp Format</a>
                     </p>
                     <p class="control">
                         <input class="input" type="text" name="timestamp-format" value="YYYY-MM-DD HH:mm:ss" required="" />
@@ -58,7 +58,7 @@
                 </div>
                 <div class="field has-addons" title="Number of actual routers on the network at the time of the log">
                     <p class="control">
-                        <a class="button is-static">&#x1F50C; Routers</a>
+                        <a class="button is-static">🔌 Routers</a>
                     </p>
                     <p class="control">
                         <input class="input" type="number" name="number-routers" placeholder="Routers" min="0" value="0" required="" />
@@ -66,7 +66,7 @@
                 </div>
                 <div class="field has-addons" title="Number of actual end devices on the network at the time of the log">
                     <p class="control">
-                        <a class="button is-static">&#x1F50B; End devices</a>
+                        <a class="button is-static">🔋 End devices</a>
                     </p>
                     <p class="control">
                         <input class="input" type="number" name="number-devices" placeholder="End Device" min="0" value="0" required="" />
@@ -74,10 +74,21 @@
                 </div>
                 <div class="field has-addons">
                     <p class="control">
-                        <a class="button is-static">&#x1F50C; Log File</a>
+                        <a class="button is-static">📂 Log File</a>
                     </p>
                     <p class="control">
                         <input class="input" type="file" name="log-file" accept=".txt, .log" required="" title="Select Log File" />
+                    </p>
+                </div>
+                <div class="field has-addons">
+                    <p class="control">
+                        <a class="button is-static">🔤 Log File Encoding</a>
+                    </p>
+                    <p class="control">
+                        <select class="input select" name="log-file-encoding" required="" title="Select Log File Encoding">
+                            <option value="utf8">utf-8</option>
+                            <option value="utf-16le">utf-16le</option>
+                        </select>
                     </p>
                 </div>
                 <div class="control">
@@ -107,7 +118,7 @@
         <article class="message">
             <div class="message-header">
                 <p>Zigbee2MQTT Ember Helper</p>
-                <a href="https://github.com/Nerivec/z2m-ember-helper/" target="_blank">Version: 1.2.2</button>
+                <a href="https://github.com/Nerivec/z2m-ember-helper/" target="_blank">Version: 1.2.2</a>
             </div>
             <div class="message-body">
                 <p>Get a better understanding of your Zigbee network using Zigbee2MQTT with Ember driver (for EmberZNet-based adapter).</p>
